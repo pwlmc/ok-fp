@@ -1,8 +1,8 @@
 export type Some<T> = {
-  some: T;
+	some: T;
 };
 
-export type None = Symbol;
+export type None = symbol;
 
 export type OptionV<T> = Some<T> | None;
 

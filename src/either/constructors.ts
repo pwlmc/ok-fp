@@ -1,5 +1,5 @@
-import { type Option } from "../option.js";
-import { createEither, Either } from "./either.js";
+import type { Option } from "../option.js";
+import { createEither, type Either } from "./either.js";
 
 /**
  * Creates an Either containing an error value (Left).
@@ -15,7 +15,7 @@ import { createEither, Either } from "./either.js";
  * ```
  */
 export function left<E, T = never>(left: E): Either<E, T> {
-  return createEither({ left });
+	return createEither({ left });
 }
 
 /**
@@ -32,7 +32,7 @@ export function left<E, T = never>(left: E): Either<E, T> {
  * ```
  */
 export function right<T, E = never>(right: T): Either<E, T> {
-  return createEither({ right });
+	return createEither({ right });
 }
 
 /**
@@ -54,10 +54,10 @@ export function right<T, E = never>(right: T): Either<E, T> {
  * ```
  */
 export function fromNullable<E, T>(
-  nullable: T | null | undefined,
-  onNullish: () => E
+	nullable: T | null | undefined,
+	onNullish: () => E,
 ): Either<E, T> {
-  return nullable != null ? right<T, E>(nullable) : left<E, T>(onNullish());
+	return nullable != null ? right<T, E>(nullable) : left<E, T>(onNullish());
 }
 
 /**
@@ -82,14 +82,14 @@ export function fromNullable<E, T>(
  * ```
  */
 export function tryCatch<E, T>(
-  fn: () => T,
-  onThrow: (err: unknown) => E
+	fn: () => T,
+	onThrow: (err: unknown) => E,
 ): Either<E, T> {
-  try {
-    return right(fn());
-  } catch (err) {
-    return left(onThrow(err));
-  }
+	try {
+		return right(fn());
+	} catch (err) {
+		return left(onThrow(err));
+	}
 }
 
 /**
@@ -108,11 +108,11 @@ export function tryCatch<E, T>(
  * ```
  */
 export function fromOption<E, T>(
-  opt: Option<T>,
-  onNone: () => E
+	opt: Option<T>,
+	onNone: () => E,
 ): Either<E, T> {
-  return opt.match(
-    () => left<E, T>(onNone()),
-    (value) => right<T, E>(value)
-  );
+	return opt.match(
+		() => left<E, T>(onNone()),
+		(value) => right<T, E>(value),
+	);
 }

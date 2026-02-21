@@ -1,5 +1,5 @@
-import { some, none } from "./constructors.js";
-import { Option } from "./option.js";
+import { none, some } from "./constructors.js";
+import type { Option } from "./option.js";
 
 /**
  * Combines two Options using a mapping function.
@@ -18,11 +18,11 @@ import { Option } from "./option.js";
  * ```
  */
 export function map2<A, B, C>(
-  optA: Option<A>,
-  optB: Option<B>,
-  mapper: (a: A, b: B) => C
+	optA: Option<A>,
+	optB: Option<B>,
+	mapper: (a: A, b: B) => C,
 ) {
-  return optA.map((a) => (b: B) => mapper(a, b)).ap(optB);
+	return optA.map((a) => (b: B) => mapper(a, b)).ap(optB);
 }
 
 /**
@@ -43,15 +43,15 @@ export function map2<A, B, C>(
  * ```
  */
 export function map3<A, B, C, D>(
-  optA: Option<A>,
-  optB: Option<B>,
-  optC: Option<C>,
-  mapper: (a: A, b: B, c: C) => D
+	optA: Option<A>,
+	optB: Option<B>,
+	optC: Option<C>,
+	mapper: (a: A, b: B, c: C) => D,
 ) {
-  return optA
-    .map((a) => (b: B) => (c: C) => mapper(a, b, c))
-    .ap(optB)
-    .ap(optC);
+	return optA
+		.map((a) => (b: B) => (c: C) => mapper(a, b, c))
+		.ap(optB)
+		.ap(optC);
 }
 
 /**
@@ -69,15 +69,15 @@ export function map3<A, B, C, D>(
  * ```
  */
 export function sequence<T>(opts: Option<T>[]): Option<T[]> {
-  const out: T[] = [];
+	const out: T[] = [];
 
-  for (const opt of opts) {
-    const [value] = opt.toArray();
-    if (!value) {
-      return none<T[]>();
-    }
-    out.push(value);
-  }
+	for (const opt of opts) {
+		const [value] = opt.toArray();
+		if (!value) {
+			return none<T[]>();
+		}
+		out.push(value);
+	}
 
-  return some(out);
+	return some(out);
 }
