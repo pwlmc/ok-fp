@@ -97,7 +97,7 @@ console.log(
 ); // "Error: Age must be a whole number"
 ```
 ::: tip Key takeaway
-`Either` gives you both the success value and error information, making it ideal for validation and error recovery.
+`Either` gives you both the success value and error information, making it ideal for error recovery.
 :::
 
 **Learn about `Either`:** Check the [Either guide](./either.md) for error handling strategies.

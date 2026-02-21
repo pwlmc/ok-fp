@@ -6,7 +6,7 @@ export default defineConfig({
 	themeConfig: {
 		nav: [
 			{ text: "Home", link: "/" },
-			{ text: "Getting Started", link: "/getting-started" },
+			{ text: "Guide", link: "/getting-started" },
 		],
 		sidebar: [
 			{
@@ -15,6 +15,9 @@ export default defineConfig({
 					{ text: "Getting Started", link: "/getting-started" },
 					{ text: "Option", link: "/option" },
 					{ text: "Either", link: "/either" },
+					{ text: "Validation", link: "/validation" },
+					{ text: "Task", link: "/task" },
+					{ text: "TaskEither", link: "/task-either" },
 				],
 			},
 		],
