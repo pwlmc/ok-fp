@@ -64,7 +64,7 @@ compute("abc"); // returns Option.none() (fails parsing)
 
 Full documentation and API reference are available in the docs site or the `docs/` folder.
 
-[API docs](pwlmc.github.io/okfp/)
+[API docs](https://pwlmc.github.io/okfp/)
 
 ## License
 
