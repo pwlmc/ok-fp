@@ -89,31 +89,6 @@ const result = x.match(
 
 ## API Reference
 
-| Group | Method | Description |
-|-------|--------|-------------|
-| [Construct](#construct) | [`some`](#some) | Create an Option with a value |
-| [Construct](#construct) | [`none`](#none) | Create an empty Option |
-| [Construct](#construct) | [`fromNullable`](#fromnullable) | Convert nullable to Option |
-| [Construct](#construct) | [`fromEither`](#fromeither) | Convert Either to Option |
-| [Transform](#transform) | [`map`](#map) | Transform value if present |
-| [Transform](#transform) | [`filter`](#filter) | Keep value only if predicate holds |
-| [Chain](#chain) | [`flatMap`](#flatmap) | Chain Option-returning operations |
-| [Chain](#chain) | [`flatten`](#flatten) | Remove one level of nesting |
-| [Recover](#recover) | [`orElse`](#orelse) | Return this Option or fallback |
-| [Combine](#combine) | [`zip`](#zip) | Combine two Options into a tuple |
-| [Combine](#combine) | [`ap`](#ap) | Apply Option-wrapped function to Option |
-| [Observe](#observe) | [`tap`](#tap) | Run side effect if Some |
-| [Observe](#observe) | [`tapNone`](#tapnone) | Run side effect if None |
-| [Pattern match](#pattern-match) | [`match`](#match) | Pattern match on Option |
-| [Extract](#extract) | [`getOrElse`](#getorelse) | Extract value or fallback |
-| [Extract](#extract) | [`toNullable`](#tonullable) | Convert Option to nullable |
-| [Extract](#extract) | [`toArray`](#toarray) | Convert Option to array |
-| [Helpers](#helpers) | [`map2`](#map2) | Combine two Options with a function |
-| [Helpers](#helpers) | [`map3`](#map3) | Combine three Options with a function |
-| [Helpers](#helpers) | [`sequence`](#sequence) | Convert array of Options to Option of array |
-
-## Construct
-
 ### some
 
 ```ts
@@ -126,7 +101,7 @@ Create an Option containing a value.
 some(42) // Some(42)
 some("hello") // Some("hello")
 ```
---- 
+---
 
 ### none
 
@@ -171,7 +146,7 @@ fromEither(right(42))          // Some(42)
 fromEither(left("error"))      // None
 ```
 
-## Transform
+---
 
 ### map
 
@@ -201,7 +176,7 @@ some(5).filter(n => n > 3) // Some(5)
 some(2).filter(n => n > 3) // None
 ```
 
-## Chain
+---
 
 ### flatMap
 
@@ -233,8 +208,7 @@ some(some(5)).flatten()        // Some(5)
 some(none<number>()).flatten() // None
 ```
 
-
-## Recover
+---
 
 ### orElse
 
@@ -249,8 +223,7 @@ some(5).orElse(() => some(10))  // Some(5)
 none().orElse(() => some(10))   // Some(10)
 ```
 
-
-## Combine
+---
 
 ### zip
 
@@ -281,7 +254,7 @@ some(add(5)).ap(some(3)) // Some(8)
 some(add(5)).ap(none())  // None
 ```
 
-## Observe
+---
 
 ### tap
 
@@ -311,7 +284,7 @@ some(5).tapNone(() => console.log("empty")) // Some(5), no log
 none().tapNone(() => console.log("empty"))  // None, logs "empty"
 ```
 
-## Pattern match
+---
 
 ### match
 
@@ -326,7 +299,7 @@ some(5).match(() => "empty", x => `value: ${x}`) // "value: 5"
 none().match(() => "empty", x => `value: ${x}`)  // "empty"
 ```
 
-## Extract
+---
 
 ### getOrElse
 
@@ -371,7 +344,7 @@ some(42).toArray() // [42]
 none().toArray()   // []
 ```
 
-## Helpers
+---
 
 ### map2
 

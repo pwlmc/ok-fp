@@ -22,5 +22,8 @@ export default defineConfig({
 			},
 		],
 		socialLinks: [{ icon: "github", link: "https://github.com/pwlmc/okfp" }],
+		outline: {
+			level: [2, 3],
+		},
 	},
 });

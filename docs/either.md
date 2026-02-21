@@ -86,31 +86,6 @@ const result = x.match(
 
 ## API Reference
 
-| Group | Method | Description |
-|-------|--------|-------------|
-| [Construct](#construct) | [`right`](#right) | Create an Either with a success value |
-| [Construct](#construct) | [`left`](#left) | Create an Either with an error value |
-| [Construct](#construct) | [`fromNullable`](#fromnullable) | Convert nullable to Either |
-| [Construct](#construct) | [`tryCatch`](#trycatch) | Wrap a throwing function in Either |
-| [Construct](#construct) | [`fromOption`](#fromoption) | Convert Option to Either |
-| [Transform](#transform) | [`map`](#map) | Transform the Right value |
-| [Transform](#transform) | [`filterOrElse`](#filterorelse) | Keep Right only if predicate holds |
-| [Transform](#transform) | [`swap`](#swap) | Swap Left and Right sides |
-| [Chain](#chain) | [`flatMap`](#flatmap) | Chain Either-returning operations |
-| [Chain](#chain) | [`flatten`](#flatten) | Remove one level of nesting |
-| [Recover](#recover) | [`orElse`](#orelse) | Recover from Left with a fallback |
-| [Combine](#combine) | [`zip`](#zip) | Combine two Eithers into a tuple |
-| [Combine](#combine) | [`ap`](#ap) | Apply Either-wrapped function to Either |
-| [Observe](#observe) | [`tap`](#tap) | Run side effect if Right |
-| [Pattern match](#pattern-match) | [`match`](#match) | Pattern match on Either |
-| [Extract](#extract) | [`getOrElse`](#getorelse) | Extract Right value or fallback |
-| [Extract](#extract) | [`toResult`](#toresult) | Convert Either to Result object |
-| [Helpers](#helpers) | [`map2`](#map2) | Combine two Eithers with a function |
-| [Helpers](#helpers) | [`map3`](#map3) | Combine three Eithers with a function |
-| [Helpers](#helpers) | [`sequence`](#sequence) | Convert array of Eithers to Either of array |
-
-## Construct
-
 ### right
 
 ```ts
@@ -188,7 +163,7 @@ fromOption(some(42), () => "empty")  // Right(42)
 fromOption(none(), () => "empty")    // Left("empty")
 ```
 
-## Transform
+---
 
 ### map
 
@@ -234,7 +209,7 @@ right(42).swap()      // Left(42)
 left("error").swap()  // Right("error")
 ```
 
-## Chain
+---
 
 ### flatMap
 
@@ -269,7 +244,7 @@ right(left("inner error")).flatten()   // Left("inner error")
 left("outer error").flatten()          // Left("outer error")
 ```
 
-## Recover
+---
 
 ### orElse
 
@@ -285,7 +260,7 @@ left("error").orElse((err) => right(0))  // Right(0)
 left("error").orElse((err) => left("still bad")) // Left("still bad")
 ```
 
-## Combine
+---
 
 ### zip
 
@@ -318,8 +293,7 @@ right(add(5)).ap(left("err")) // Left("err")
 left("err").ap(right(3))      // Left("err")
 ```
 
-
-## Observe
+---
 
 ### tap
 
@@ -334,7 +308,7 @@ right(42).tap(v => console.log("value:", v))  // Right(42), logs "value: 42"
 left("error").tap(v => console.log("value:", v)) // Left("error"), no log
 ```
 
-## Pattern match
+---
 
 ### match
 
@@ -356,7 +330,7 @@ left("oops").match(
 ) // "Error: oops"
 ```
 
-## Extract
+---
 
 ### getOrElse
 
@@ -386,7 +360,7 @@ right(42).toResult()      // { ok: true, value: 42 }
 left("error").toResult()  // { ok: false, error: "error" }
 ```
 
-## Helpers
+---
 
 ### map2
 
