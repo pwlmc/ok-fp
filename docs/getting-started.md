@@ -1,22 +1,22 @@
 # Getting Started
 
-Welcome to OKFP! This guide will help you get up and running with typed effects in TypeScript.
+Welcome to OK-FP! This guide will help you get up and running with typed effects in TypeScript.
 
 ## Installation
 
-Install OKFP with your package manager of choice:
+Install OK-FP with your package manager of choice:
 
 ::: code-group
 ```sh [npm]
-$ npm install okfp
+$ npm install ok-fp
 ```
 
 ```sh [pnpm]
-$ pnpm add okfp
+$ pnpm add ok-fp
 ```
 
 ```sh [yarn]
-$ yarn add okfp
+$ yarn add ok-fp
 ```
 :::
 
@@ -26,7 +26,7 @@ $ yarn add okfp
 The simplest way to start is with `Option`, which represents a value that may or may not exist.
 
 ```ts
-import { type Option, some, none } from "okfp/option";
+import { type Option, some, none } from "ok-fp/option";
 
 type User = {
   id: string,
@@ -67,7 +67,7 @@ Instead of checking `if (user !== null)`, `Option` forces you to handle both cas
 When your operation can fail *with a reason*, use `Either`. It can be `Right` (success) or `Left` (error).
 
 ```ts
-import { type Either, right, left } from "okfp";
+import { type Either, right, left } from "ok-fp";
 
 const parseAge = (input: string): Either<string, number> => {
   const age = Number(input);

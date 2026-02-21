@@ -6,6 +6,6 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Initial release of `okfp`.
+- Initial release of `ok-fp`.
 - `Option` type with `some`, `none`, `map`, `flatMap`, and related utilities.
 - `Either` type with `right`, `left`, `map`, `flatMap`, and related utilities.

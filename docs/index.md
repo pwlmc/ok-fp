@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: OKFP
+  name: OK-FP
   text: Essential typed effects for TypeScript.
   tagline: Composable, type-safe wrappers for optional values, errors, and async computations.
   actions:
@@ -11,5 +11,5 @@ hero:
       link: /getting-started
     - theme: alt
       text: View on GitHub
-      link: https://github.com/pwlmc/okfp
+      link: https://github.com/pwlmc/ok-fp
 ---
