@@ -4,7 +4,7 @@
 
 - [x] (feat) Option
 - [x] (feat) Either
-- [x] (doc) Basic doc site
+- [x] (doc) Basic docs site
 - [ ] (doc) Document design decisions
 - [ ] (feat) Validation (applicative)
 - [ ] (feat) Task
