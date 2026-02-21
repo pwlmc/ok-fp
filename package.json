@@ -1,5 +1,5 @@
 {
-  "name": "okfp",
+  "name": "ok-fp",
   "version": "0.0.1",
   "description": "Essential typed effects for TypeScript.",
   "keywords": [
@@ -15,13 +15,13 @@
     "task",
     "taskEither"
   ],
-  "homepage": "https://github.com/pwlmc/okfp#readme",
+  "homepage": "https://github.com/pwlmc/ok-fp#readme",
   "bugs": {
-    "url": "https://github.com/pwlmc/okfp/issues"
+    "url": "https://github.com/pwlmc/ok-fp/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pwlmc/okfp.git"
+    "url": "git+https://github.com/pwlmc/ok-fp.git"
   },
   "license": "MIT",
   "author": "pwlmc",
