@@ -1,6 +1,6 @@
-import { type Either } from "../either.js";
+import type { Either } from "../either.js";
 import { NONE } from "./model.js";
-import { Option, createOption } from "./option.js";
+import { createOption, type Option } from "./option.js";
 
 /**
  * Creates an {@link Option} that contains a value.
@@ -13,7 +13,7 @@ import { Option, createOption } from "./option.js";
  * @returns An {@link Option} containing the provided value.
  */
 export function some<T>(some: T): Option<T> {
-  return createOption({ some });
+	return createOption({ some });
 }
 
 /**
@@ -28,7 +28,7 @@ export function some<T>(some: T): Option<T> {
  * ```
  */
 export function none<T>(): Option<T> {
-  return createOption<T>(NONE);
+	return createOption<T>(NONE);
 }
 
 /**
@@ -46,7 +46,7 @@ export function none<T>(): Option<T> {
  * @returns An {@link Option} that is `Some` when the value is present, otherwise `None`.
  */
 export function fromNullable<T>(nullable: null | undefined | T): Option<T> {
-  return nullable == null ? none() : some<T>(nullable);
+	return nullable == null ? none() : some<T>(nullable);
 }
 
 /**
@@ -70,8 +70,8 @@ export function fromNullable<T>(nullable: null | undefined | T): Option<T> {
  * ```
  */
 export function fromEither<L, R>(either: Either<L, R>): Option<R> {
-  return either.match(
-    () => none<R>(),
-    (right) => some(right)
-  );
+	return either.match(
+		() => none<R>(),
+		(right) => some(right),
+	);
 }

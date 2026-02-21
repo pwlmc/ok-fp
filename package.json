@@ -41,12 +41,14 @@
     "dist"
   ],
   "scripts": {
+    "lint": "biome check src/",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "build": "tsdown  --format esm --dts",
     "dev": "tsdown --format esm --dts --watch"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.4",
     "@vitest/coverage-v8": "^4.0.18",
     "tsdown": "^0.20.3",
     "typescript": "^5.9.3",
