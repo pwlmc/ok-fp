@@ -267,7 +267,7 @@ export function createEither<E, T>(value: EitherValue<E, T>): Either<E, T> {
 			),
 
 		toResult: () =>
-			either.match<Result<E, T>>(
+			either.match<EitherResult<E, T>>(
 				(error) => ({
 					ok: false,
 					error,
