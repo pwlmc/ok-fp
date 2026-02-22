@@ -4,23 +4,13 @@ import { functorLawsSpec } from "../testUtils/functorLaws.js";
 import { invalid, valid } from "./constructors.js";
 import type { Validation } from "./validation.js";
 
-type ValidationTag<E, T> =
-	| { tag: "VALID"; valid: T }
-	| { tag: "INVALID"; invalid: readonly E[] };
-
-const asTag = <E, T>(v: Validation<E, T>): ValidationTag<E, T> =>
-	v.match(
-		(errors) => ({ tag: "INVALID" as const, invalid: errors }),
-		(value) => ({ tag: "VALID" as const, valid: value }),
-	);
-
 describe("validation", () => {
 	describe("map", () => {
 		const mapper = (n: number) => n + 2;
 
 		it("should map valid value", () => {
 			const v = valid(2);
-			expect(asTag(v.map(mapper))).toEqual(asTag(valid(4)));
+			expect(v.map(mapper).toResult()).toEqual(valid(4).toResult());
 		});
 
 		it("should not change the invalid value", () => {
@@ -38,26 +28,26 @@ describe("validation", () => {
 	describe("ap", () => {
 		it("should apply the function to the valid value", () => {
 			const v = valid((n: number) => n * 2).ap(valid(3));
-			expect(asTag(v)).toEqual(asTag(valid(6)));
+			expect(v.toResult()).toEqual(valid(6).toResult());
 		});
 
 		it("should return invalid when the function is invalid", () => {
 			const v = invalid<string, (n: number) => number>("fn error").ap(valid(3));
-			expect(asTag(v)).toEqual(asTag(invalid("fn error")));
+			expect(v.toResult()).toEqual(invalid("fn error").toResult());
 		});
 
 		it("should return invalid when the argument is invalid", () => {
 			const v = valid((n: number) => n * 2).ap(invalid("arg error"));
-			expect(asTag(v)).toEqual(asTag(invalid("arg error")));
+			expect(v.toResult()).toEqual(invalid("arg error").toResult());
 		});
 
 		it("should accumulate errors when both are invalid", () => {
 			const v = invalid<string, (n: number) => number>("fn error").ap(
 				invalid("arg error"),
 			);
-			expect(asTag(v)).toEqual({
-				tag: "INVALID",
-				invalid: ["fn error", "arg error"],
+			expect(v.toResult()).toEqual({
+				ok: false,
+				errors: ["fn error", "arg error"],
 			});
 		});
 	});
@@ -110,12 +100,70 @@ describe("validation", () => {
 		});
 	});
 
+	describe("tapInvalid", () => {
+		it("should not call the side effect and return the same validation on valid value", () => {
+			const sideEffect = vi.fn();
+			const v = valid(2);
+			const tapV = v.tapInvalid(sideEffect);
+			expect(sideEffect).not.toHaveBeenCalled();
+			expect(tapV).toBe(v);
+		});
+
+		it("should call the side effect and return the same validation on invalid", () => {
+			const sideEffect = vi.fn();
+			const v = invalid("error");
+			const tapV = v.tapInvalid(sideEffect);
+			expect(sideEffect).toHaveBeenCalledWith(["error"]);
+			expect(tapV).toBe(v);
+		});
+	});
+
+	describe("zip", () => {
+		it("should return a validation of tuple on valid values", () => {
+			const v = valid(2).zip(valid("two"));
+			expect(v.toResult()).toEqual(valid([2, "two"]).toResult());
+		});
+
+		it("should accumulate errors when both are invalid", () => {
+			const v = invalid<string, number>("e1").zip(
+				invalid<string, string>("e2"),
+			);
+			expect(v.toResult()).toEqual({ ok: false, errors: ["e1", "e2"] });
+		});
+
+		it("should return invalid when first is invalid", () => {
+			expect(
+				invalid<string, number>("e1").zip(valid("two")).toResult(),
+			).toEqual({ ok: false, errors: ["e1"] });
+		});
+
+		it("should return invalid when second is invalid", () => {
+			expect(valid(2).zip(invalid<string, string>("e2")).toResult()).toEqual({
+				ok: false,
+				errors: ["e2"],
+			});
+		});
+	});
+
+	describe("toResult", () => {
+		it("should return ok result with value on valid", () => {
+			expect(valid(42).toResult()).toEqual({ ok: true, value: 42 });
+		});
+
+		it("should return not ok result with errors on invalid", () => {
+			expect(invalid("error").toResult()).toEqual({
+				ok: false,
+				errors: ["error"],
+			});
+		});
+	});
+
 	describe(
 		"functor laws",
 		functorLawsSpec<Validation<never, number>>({
 			of: (value) => valid(value),
 			map: (v, mapper) => v.map(mapper),
-			asTag: (v) => asTag(v),
+			asTag: (v) => v.toResult(),
 		}),
 	);
 
@@ -125,7 +173,7 @@ describe("validation", () => {
 			of: (value) => valid(value),
 			ap: (v, arg) =>
 				(v as Validation<never, (arg: unknown) => unknown>).ap(arg),
-			asTag: (v) => asTag(v),
+			asTag: (v) => v.toResult(),
 		}),
 	);
 });

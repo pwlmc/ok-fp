@@ -56,41 +56,6 @@ export function map3<EA, A, EB, B, EC, C, D>(
 }
 
 /**
- * Applies a function to each element of an array, collecting all valid results
- * or accumulating all errors.
- *
- * @param as - Array of values to process
- * @param f - Function that returns a Validation for each element
- * @returns Validation containing an array of all results, or all accumulated errors
- *
- * @example
- * ```typescript
- * traverse([1, 2, 3], x => x > 0 ? valid(x) : invalid(`${x} is not positive`))
- * // Valid([1, 2, 3])
- * traverse([-1, 2, -3], x => x > 0 ? valid(x) : invalid(`${x} is not positive`))
- * // Invalid(["-1 is not positive", "-3 is not positive"])
- * ```
- */
-export function traverse<E, A, B>(
-	as: readonly A[],
-	f: (a: A) => Validation<E, B>,
-): Validation<E, B[]> {
-	const errors: E[] = [];
-	const values: B[] = [];
-
-	for (const a of as) {
-		f(a).match(
-			(errs) => errors.push(...errs),
-			(v) => values.push(v),
-		);
-	}
-
-	return errors.length > 0
-		? createValidation({ invalid: errors })
-		: createValidation({ valid: values });
-}
-
-/**
  * Converts an array of Validations into a Validation of array.
  * Returns Valid with all values if all Validations are Valid, otherwise accumulates all errors.
  *
@@ -106,5 +71,17 @@ export function traverse<E, A, B>(
 export function sequence<E, T>(
 	validations: readonly Validation<E, T>[],
 ): Validation<E, T[]> {
-	return traverse(validations, (v) => v);
+	const errors: E[] = [];
+	const values: T[] = [];
+
+	for (const v of validations) {
+		v.match(
+			(errs) => errors.push(...errs),
+			(value) => values.push(value),
+		);
+	}
+
+	return errors.length > 0
+		? createValidation({ invalid: errors })
+		: createValidation({ valid: values });
 }

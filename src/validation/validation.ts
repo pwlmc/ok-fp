@@ -1,4 +1,4 @@
-import type { Valid, ValidationV } from "./model.js";
+import type { Valid, ValidationResult, ValidationV } from "./model.js";
 
 export type Validation<E, T> = {
 	/**
@@ -58,6 +58,45 @@ export type Validation<E, T> = {
 	 * @returns The same Validation instance unchanged
 	 */
 	tap: (sideEffect: (value: T) => void) => Validation<E, T>;
+
+	/**
+	 * Performs a side effect if this Validation is Invalid, returning the original Validation unchanged.
+	 * If this Validation is Valid, the side effect is not executed.
+	 *
+	 * @param sideEffect - Function to execute with the errors array (return value is ignored)
+	 * @returns The same Validation instance unchanged
+	 */
+	tapInvalid: (sideEffect: (errors: readonly E[]) => void) => Validation<E, T>;
+
+	/**
+	 * Combines this Validation with another Validation into a tuple.
+	 * If both are Valid, returns Valid containing a tuple of both values.
+	 * If either is Invalid, accumulates all errors.
+	 *
+	 * @param valA - The Validation to combine with this one
+	 * @returns Validation containing a tuple of both values, or accumulated errors
+	 *
+	 * @example
+	 * ```typescript
+	 * valid("Alice").zip(valid(30))          // Valid(["Alice", 30])
+	 * valid("Alice").zip(invalid("No age"))  // Invalid(["No age"])
+	 * invalid("e1").zip(invalid("e2"))       // Invalid(["e1", "e2"])
+	 * ```
+	 */
+	zip: <EE, A>(valA: Validation<EE, A>) => Validation<E | EE, readonly [T, A]>;
+
+	/**
+	 * Converts the Validation to a ValidationResult type.
+	 *
+	 * @returns A ValidationResult object representing the Validation's state
+	 *
+	 * @example
+	 * ```typescript
+	 * valid(42).toResult()           // { ok: true, value: 42 }
+	 * invalid("error").toResult()    // { ok: false, errors: ["error"] }
+	 * ```
+	 */
+	toResult: () => ValidationResult<E, T>;
 };
 
 export function createValidation<E, T>(
@@ -112,6 +151,20 @@ export function createValidation<E, T>(
 			validation.match(() => {}, sideEffect);
 			return validation;
 		},
+
+		tapInvalid: (sideEffect) => {
+			validation.match(sideEffect, () => {});
+			return validation;
+		},
+
+		zip: <EE, A>(valA: Validation<EE, A>) =>
+			validation.map((value) => (a: A) => [value, a] as const).ap(valA),
+
+		toResult: () =>
+			validation.match<ValidationResult<E, T>>(
+				(errors) => ({ ok: false, errors }),
+				(value) => ({ ok: true, value }),
+			),
 	};
 
 	return validation;
