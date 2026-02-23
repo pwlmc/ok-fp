@@ -297,7 +297,7 @@ none().tapNone(() => console.log("empty")); // none, logs "empty"
 ### match
 
 ```ts
-match<U>(onNone: () => U, onsome: (value: T) => U): U
+match<U>(onNone: () => U, onSome: (value: T) => U): U
 ```
 
 Pattern match on the Option.
