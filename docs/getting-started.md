@@ -102,5 +102,39 @@ console.log(
 
 **Learn about `Either`:** Check the [Either guide](./either.md) for error handling strategies.
 
+## Collecting All Errors: Validation
 
+When you need to validate several **independent** fields and report every problem at once, use `Validation`. Unlike `Either`, it accumulates all errors instead of stopping at the first one.
+
+```ts
+import { valid, invalid, map3 } from "ok-fp/validation";
+
+const validateName = (name: string) =>
+  name.trim().length > 0 ? valid(name.trim()) : invalid("Name is required");
+
+const validateEmail = (email: string) =>
+  email.includes("@") ? valid(email) : invalid("Invalid email address");
+
+const validateAge = (age: number) =>
+  age >= 18 ? valid(age) : invalid("Must be at least 18");
+
+const result = map3(
+  validateName(""),
+  validateEmail("not-an-email"),
+  validateAge(16),
+  (name, email, age) => ({ name, email, age })
+);
+
+result.match(
+  (errors) => console.error("Errors:", errors),
+  // ["Name is required", "Invalid email address", "Must be at least 18"]
+  (user) => console.log("Created user:", user)
+);
+```
+
+::: tip Key takeaway
+Use `Validation` when you want to show users **all** their mistakes at once — forms, config files, batch inputs. Use `Either` when each step depends on the previous one.
+:::
+
+**Learn about `Validation`:** See the [Validation guide](./validation.md) for the full API and a detailed comparison with `Either`.
 

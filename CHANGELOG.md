@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - `Validation<E, T>` applicative — accumulates errors across independent validations instead of short-circuiting on the first failure (unlike `Either`)
+- Full `Validation` documentation with API reference and an "Either vs Validation" decision guide
+- `Validation` section added to the Getting Started page
 
 ### Changed
 
