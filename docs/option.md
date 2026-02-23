@@ -2,7 +2,7 @@
 
 `Option<T>` represents a value that may or may not exist. It is a type-safe alternative to `null`, `undefined`, or optional chaining.
 
-- **`some<T>`** - a value of type `T` is present
+- **`Some<T>`** - a value of type `T` is present
 - **`None<T>`** - no value is present (absence)
 
 ## Why Option?
