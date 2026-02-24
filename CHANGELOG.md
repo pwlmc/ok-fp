@@ -4,11 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Next]
 
+TBA
+
+## [0.2.1](https://github.com/pwlmc/okfp/compare/v0.2.0...v0.2.1) - 2026-02-25
+
 ### Added
 
 - `Task<T>` — a lazy async computation that wraps `() => Promise<T>`, with `map`, `flatMap`, `flatten`, `ap`, `zip`, `tap`, and `run`
+- Full `Task` documentation
 
-## [0.2.0](https://github.com/pwlmc/okfp/compare/v0.0.1..v0.2.0) - 2026-02-23
+
+## [0.2.0](https://github.com/pwlmc/okfp/compare/v0.0.1...v0.2.0) - 2026-02-23
 
 ### Added
 
@@ -21,7 +27,7 @@ All notable changes to this project will be documented in this file.
 - **BREAKING** `EitherV<E, T>` renamed to `EitherValue<E, T>`.
 - **BREAKING** `OptionV<T>` renamed to `OptionValue<T>`.
 
-## [0.0.1](https://github.com/pwlmc/okfp/compare/v0.0.0..v0.0.1) - 2026-02-21
+## [0.0.1](https://github.com/pwlmc/okfp/compare/v0.0.0...v0.0.1) - 2026-02-21
 
 ### Added
 
