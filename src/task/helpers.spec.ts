@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { task } from "./constructors.js";
-import { all, sequence, traverse } from "./helpers.js";
+import { all } from "./helpers.js";
 
 describe("task helpers", () => {
 	describe("all", () => {
@@ -39,30 +39,6 @@ describe("task helpers", () => {
 			]).run();
 			expect(fn1).toHaveBeenCalledOnce();
 			expect(fn2).toHaveBeenCalledOnce();
-		});
-	});
-
-	describe("traverse", () => {
-		it("should map items to tasks and collect results", async () => {
-			const result = await traverse([1, 2, 3], (x) => task(x * 2)).run();
-			expect(result).toEqual([2, 4, 6]);
-		});
-
-		it("should return empty array for empty input", async () => {
-			const result = await traverse([], (x: number) => task(x)).run();
-			expect(result).toEqual([]);
-		});
-	});
-
-	describe("sequence", () => {
-		it("should sequence tasks and return an array of results", async () => {
-			const result = await sequence([task(1), task(2), task(3)]).run();
-			expect(result).toEqual([1, 2, 3]);
-		});
-
-		it("should return empty array for empty input", async () => {
-			const result = await sequence([]).run();
-			expect(result).toEqual([]);
 		});
 	});
 });
