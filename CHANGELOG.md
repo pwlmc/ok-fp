@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Next]
 
-TBA
+### Added
+
+- `Task<T>` — a lazy async computation that wraps `() => Promise<T>`, with `map`, `flatMap`, `flatten`, `ap`, `zip`, `tap`, and `run`
 
 ## [0.2.0](https://github.com/pwlmc/okfp/compare/v0.0.1..v0.2.0) - 2026-02-23
 

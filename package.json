@@ -39,6 +39,10 @@
     "./validation": {
       "types": "./dist/validation.d.mts",
       "default": "./dist/validation.mjs"
+    },
+    "./task": {
+      "types": "./dist/task.d.mts",
+      "default": "./dist/task.mjs"
     }
   },
   "files": [
