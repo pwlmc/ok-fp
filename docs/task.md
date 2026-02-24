@@ -1,9 +1,5 @@
 # Task
 
-::: warning Work in Progress
-`Task` is planned for release before `v1.0.0`. The API described here reflects the current design and may change.
-:::
-
 `Task<T>` represents a **lazy asynchronous computation** that always succeeds with a value of type `T`.
 
 Think of it as a `() => Promise<T>` with a composable, functional interface.
