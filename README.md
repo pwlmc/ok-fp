@@ -12,8 +12,8 @@ It provides a minimal set of **typed effects**: composable, type-safe wrappers f
 
 OK-FP is pre-1.0.
 
-- ✅ Implemented: `Option`, `Either`, `Validation`
-- 🚧 Planned before `v1.0.0`: `Task`, `TaskEither`
+- ✅ Implemented: `Option`, `Either`, `Validation`, `Task`
+- 🚧 Planned before `v1.0.0`: `TaskEither`
 
 See: [ROADMAP.md](./ROADMAP.md)
 
