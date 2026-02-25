@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Next]
 
+TBA
+
+## [0.2.2](https://github.com/pwlmc/okfp/compare/v0.2.1...v0.2.2) - 2026-02-26
+
 ### Added
 
 - `TaskEither<E, T>` - a lazy async computation that wraps `() => Promise<Either<E, T>>`, with `map`, `mapLeft`, `flatMap`, `flatten`, `ap`, `zip`, `tap`, `tapLeft`, `match`, `getOrElse`, `orElse`, and `run`
@@ -14,15 +18,14 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- `Task<T>` — a lazy async computation that wraps `() => Promise<T>`, with `map`, `flatMap`, `flatten`, `ap`, `zip`, `tap`, and `run`
+- `Task<T>` - a lazy async computation that wraps `() => Promise<T>`, with `map`, `flatMap`, `flatten`, `ap`, `zip`, `tap`, and `run`
 - Full `Task` documentation
-
 
 ## [0.2.0](https://github.com/pwlmc/okfp/compare/v0.0.1...v0.2.0) - 2026-02-23
 
 ### Added
 
-- `Validation<E, T>` applicative — accumulates errors across independent validations instead of short-circuiting on the first failure (unlike `Either`)
+- `Validation<E, T>` applicative - accumulates errors across independent validations instead of short-circuiting on the first failure (unlike `Either`)
 - Full `Validation` documentation with API reference and an "Either vs Validation" decision guide
 - `Validation` section added to the Getting Started page
 

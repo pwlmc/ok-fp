@@ -143,14 +143,14 @@ result.match(
 ```
 
 ::: tip Key takeaway
-Use `Validation` when you want to show users **all** their mistakes at once — forms, config files, batch inputs. Use `Either` when each step depends on the previous one.
+Use `Validation` when you want to show users **all** their mistakes at once - forms, config files, batch inputs. Use `Either` when each step depends on the previous one.
 :::
 
 **Learn about `Validation`:** See the [Validation guide](./validation.md) for the full API and a detailed comparison with `Either`.
 
 ## Async Computations: Task
 
-When you need to work with async operations, use `Task`. It represents a **lazy** computation that runs only when you call `.run()` — unlike Promises, which execute immediately.
+When you need to work with async operations, use `Task`. It represents a **lazy** computation that runs only when you call `.run()` - unlike Promises, which execute immediately.
 
 ```ts
 import { task, fromPromise, all } from "ok-fp/task";
@@ -183,7 +183,7 @@ const [user1, user2] = await all([
 
 ## Fallible Async Computations: TaskEither
 
-When your async operation can fail with a typed error, use `TaskEither`. It is a lazy `() => Promise<Either<E, T>>` — combining `Task`'s laziness with `Either`'s typed error handling.
+When your async operation can fail with a typed error, use `TaskEither`. It is a lazy `() => Promise<Either<E, T>>` - combining `Task`'s laziness with `Either`'s typed error handling.
 
 ```ts
 import { tryCatch, taskEither, all } from "ok-fp/taskEither";
@@ -196,9 +196,8 @@ const fetchUser = (id: string) =>
     (err) => `Fetch failed: ${err}`,
   );
 
-// Chain two async steps — short-circuits on first error
-const greeting = fetchUser("a-001")
-  .map((user) => `Hello, ${user.name}!`);
+// Chain two async steps - short-circuits on first error
+const greeting = fetchUser("a-001").map((user) => `Hello, ${user.name}!`);
 
 const result = await greeting.run();
 result.match(
@@ -213,7 +212,7 @@ const [user1, user2] = await all([fetchUser("a-001"), fetchUser("b-002")])
 ```
 
 ::: tip Key takeaway
-`TaskEither` makes the error type visible in the signature and forces you to handle it. Use it for any async operation that can fail — API requests, file reads, database queries.
+`TaskEither` makes the error type visible in the signature and forces you to handle it. Use it for any async operation that can fail - API requests, file reads, database queries.
 :::
 
 **Dive deeper into `TaskEither`:** See the [TaskEither guide](./task-either.md) for all available methods and patterns.
