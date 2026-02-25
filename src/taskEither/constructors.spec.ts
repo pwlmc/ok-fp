@@ -15,11 +15,6 @@ describe("taskEither constructors", () => {
 			const te = taskEither(42);
 			expect((await te.run()).toResult()).toEqual(right(42).toResult());
 		});
-
-		it("should be lazy and not run until run() is called", () => {
-			const te = taskEither(1);
-			expect(te).toBeDefined();
-		});
 	});
 
 	describe("taskLeft", () => {
