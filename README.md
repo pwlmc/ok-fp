@@ -10,12 +10,12 @@ It provides a minimal set of **typed effects**: composable, type-safe wrappers f
 
 ## Effects
 
-| Effect | Description |
-|---|---|
-| [`Option<T>`](./docs/option.md) | A value that may or may not be present. Use instead of `null`/`undefined`. |
-| [`Either<E, T>`](./docs/either.md) | A computation that succeeds with `T` or fails with a typed error `E`. Errors are explicit and must be handled. |
-| [`Validation<E, T>`](./docs/validation.md) | Like `Either`, but accumulates **all** errors instead of stopping at the first one. Ideal for form and config validation. |
-| [`Task<T>`](./docs/task.md) | A lazy async computation that always succeeds. Executes only when `.run()` is called — unlike Promises, which are eager. |
+| Effect                                      | Description                                                                                                                   |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [`Option<T>`](./docs/option.md)             | A value that may or may not be present. Use instead of `null`/`undefined`.                                                    |
+| [`Either<E, T>`](./docs/either.md)          | A computation that succeeds with `T` or fails with a typed error `E`. Errors are explicit and must be handled.                |
+| [`Validation<E, T>`](./docs/validation.md)  | Like `Either`, but accumulates **all** errors instead of stopping at the first one. Ideal for form and config validation.     |
+| [`Task<T>`](./docs/task.md)                 | A lazy async computation that always succeeds. Executes only when `.run()` is called - unlike Promises, which are eager.      |
 | [`TaskEither<E, T>`](./docs/task-either.md) | A lazy async computation that can succeed with `T` or fail with `E`. Combines `Task`'s laziness with `Either`'s typed errors. |
 
 ## Installation
@@ -47,15 +47,15 @@ const positive = (n: number): Option<number> => (n > 0 ? some(n) : none());
 
 const compute = (input: string): Option<number> =>
   parseNumber(input)
-    .flatMap(nonZero)     // must not be 0
-    .flatMap(positive)    // must be > 0
-    .map((n) => 1 / n)    // reciprocal (no need for flatMap)
+    .flatMap(nonZero) // must not be 0
+    .flatMap(positive) // must be > 0
+    .map((n) => 1 / n) // reciprocal (no need for flatMap)
     .map((n) => n * 100); // scale
 
 // Usage (returns Option instances)
-compute("4");   // returns some(25)
-compute("0");   // returns none() (fails nonZero)
-compute("-3");  // returns none() (fails positive)
+compute("4"); // returns some(25)
+compute("0"); // returns none() (fails nonZero)
+compute("-3"); // returns none() (fails positive)
 compute("abc"); // returns none() (fails parsing)
 ```
 
