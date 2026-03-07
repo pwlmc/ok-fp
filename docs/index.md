@@ -1,11 +1,16 @@
-<div style="text-align: center; padding: 2rem 0 6rem;">
-  <h1 style="font-size: 3rem; font-weight: 700; color: var(--vp-c-brand-1); margin: 0 0 0.75rem; line-height: 1.1;">OK-FP</h1>
-  <p style="font-size: 1.25rem; color: var(--vp-c-text-2); margin: 0;">Essential Effect Data Types for TypeScript</p>
+<div class="hero">
+  <h1 class="hero-title">OK-FP</h1>
+  <p class="hero-tagline">Essential Effect Data Types for TypeScript</p>
 </div>
 
 # Getting Started
 
-OK-FP is a small, focused functional programming toolkit for TypeScript. It provides composable, type-safe wrappers for optional values, errors, and async computations.
+OK-FP is a small, focused functional programming toolkit for TypeScript. It provides composable, type-safe wrappers for optional values, errors, and async computations. If you're new to Effect Data Types, the video below gives a quick introduction to the core ideas behind the library.
+
+<div class="video-wrapper">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/-aNP5pisXWY?start=21" title="Introduction to OK-FP (Riga Frontend Meetup)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="video-iframe"></iframe>
+  <p class="video-caption">Introduction to OK-FP (FrontEnd Meetup Riga)</p>
+</div>
 
 ## Installation
 
@@ -27,192 +32,151 @@ $ yarn add ok-fp
 
 :::
 
-## Your First Effect: Option
+## Effects
 
-The simplest way to start is with `Option`, which represents a value that may or may not exist.
+<div class="effect-card">
+
+<a href="./option.html" class="effect-title">Option</a>
+
+A value that might not exist, a type-safe alternative to `null` checks.
 
 ```ts
-import { type Option, some, none } from "ok-fp/option";
-
-type User = {
-  id: string;
-  name: string;
-};
-
-const users: User[] = [
-  {
-    id: "a-001",
-    name: "Alice",
-  },
-  {
-    id: "b-002",
-    name: "Bob",
-  },
-];
-
-// A function that may not find a result
-const getUserName = (id: string): Option<string> => {
-  const user = users.find((u) => u.id === id);
-  return user ? some(user.name) : none();
-};
-
-// Chain operations safely
-const greeting = getUserName("a-001")
+some("Alice")
   .map((name) => `Hello, ${name}!`)
   .getOrElse(() => "User not found");
-
-console.log(greeting); // "Hello, Alice!"
-console.log(getUserName("xxx").getOrElse(() => "User not found")); // "User not found"
 ```
 
-::: tip Key takeaway
-Instead of checking `if (user !== null)`, `Option` forces you to handle both cases explicitly.
-:::
+</div>
 
-**Dive deeper into `Option`:** See the [Option guide](./option.md) for all available methods and advanced patterns
+<div class="effect-card">
 
-## Handling Errors: Either
+<a href="./either.html" class="effect-title">Either</a>
 
-When your operation can fail _with a reason_, use `Either`. It can be `Right` (success) or `Left` (error).
+Success or typed error. Stops at the first failure.
 
 ```ts
-import { type Either, right, left } from "ok-fp/either";
-
-const parseAge = (input: string): Either<string, number> => {
-  const age = Number(input);
-  if (!Number.isInteger(age)) {
-    return left("Age must be a whole number");
-  }
-  if (age < 0 || age > 150) {
-    return left("Age must be between 0 and 150");
-  }
-  return right(age);
-};
-
-// Chain with custom error handling
-const result = parseAge("25")
+right(25)
   .map((age) => age + 1)
   .match(
-    (error) => `Error: ${error}`,
-    (age) => `Next year you'll be ${age}`,
-  );
-
-console.log(result); // "Next year you'll be 26"
-console.log(
-  parseAge("abc").match(
-    (error) => `Error: ${error}`,
+    (err) => `Error: ${err}`,
     (age) => `Age: ${age}`,
-  ),
-); // "Error: Age must be a whole number"
-```
-
-::: tip Key takeaway
-`Either` gives you both the success value and error information, making it ideal for error recovery.
-:::
-
-**Learn about `Either`:** Check the [Either guide](./either.md) for error handling strategies.
-
-## Collecting All Errors: Validation
-
-When you need to validate several **independent** fields and report every problem at once, use `Validation`. Unlike `Either`, it accumulates all errors instead of stopping at the first one.
-
-```ts
-import { valid, invalid, map3 } from "ok-fp/validation";
-
-const validateName = (name: string) =>
-  name.trim().length > 0 ? valid(name.trim()) : invalid("Name is required");
-
-const validateEmail = (email: string) =>
-  email.includes("@") ? valid(email) : invalid("Invalid email address");
-
-const validateAge = (age: number) =>
-  age >= 18 ? valid(age) : invalid("Must be at least 18");
-
-const result = map3(
-  validateName(""),
-  validateEmail("not-an-email"),
-  validateAge(16),
-  (name, email, age) => ({ name, email, age }),
-);
-
-result.match(
-  (errors) => console.error("Errors:", errors),
-  // ["Name is required", "Invalid email address", "Must be at least 18"]
-  (user) => console.log("Created user:", user),
-);
-```
-
-::: tip Key takeaway
-Use `Validation` when you want to show users **all** their mistakes at once - forms, config files, batch inputs. Use `Either` when each step depends on the previous one.
-:::
-
-**Learn about `Validation`:** See the [Validation guide](./validation.md) for the full API and a detailed comparison with `Either`.
-
-## Async Computations: Task
-
-When you need to work with async operations, use `Task`. It represents a **lazy** computation that runs only when you call `.run()` - unlike Promises, which execute immediately.
-
-```ts
-import { task, fromPromise, all } from "ok-fp/task";
-
-const fetchUser = (id: string) =>
-  fromPromise(() =>
-    fetch(`/api/users/${id}`).then(
-      (r) => r.json() as Promise<{ name: string }>,
-    ),
   );
-
-// Build the pipeline without executing anything yet
-const greeting = fetchUser("a-001").map((user) => `Hello, ${user.name}!`);
-
-// Nothing has run until here:
-const message = await greeting.run(); // "Hello, Alice!"
-
-// Run multiple Tasks concurrently
-const [user1, user2] = await all([
-  fetchUser("a-001"),
-  fetchUser("b-002"),
-]).run();
 ```
 
-::: tip Key takeaway
-`Task` lets you describe and compose async operations before executing them. Chain steps with `.flatMap()`, transform results with `.map()`, and run concurrent work with `all()`.
-:::
+</div>
 
-**Dive deeper into `Task`:** See the [Task guide](./task.md) for all available methods and patterns.
+<div class="effect-card">
 
-## Fallible Async Computations: TaskEither
+<a href="./validation.html" class="effect-title">Validation</a>
 
-When your async operation can fail with a typed error, use `TaskEither`. It is a lazy `() => Promise<Either<E, T>>` - combining `Task`'s laziness with `Either`'s typed error handling.
+Like Either, but accumulates **all** errors. Ideal for forms and config.
 
 ```ts
-import { tryCatch, taskEither, all } from "ok-fp/taskEither";
+map2(validateName(name), validateAge(age), (name, age) => ({ name, age }));
+// Invalid(["Name required", "Must be 18+"])
+```
 
-type User = { id: string; name: string };
+</div>
 
-const fetchUser = (id: string) =>
-  tryCatch(
-    () => fetch(`/api/users/${id}`).then((r) => r.json() as Promise<User>),
-    (err) => `Fetch failed: ${err}`,
-  );
+<div class="effect-card">
 
-// Chain two async steps - short-circuits on first error
-const greeting = fetchUser("a-001").map((user) => `Hello, ${user.name}!`);
+<a href="./task.html" class="effect-title">Task</a>
 
-const result = await greeting.run();
-result.match(
-  (err) => console.error(err),
-  (msg) => console.log(msg), // "Hello, Alice!"
-);
+Lazy async computation. Nothing runs until you call `.run()`.
 
-// Run multiple requests concurrently
-const [user1, user2] = await all([fetchUser("a-001"), fetchUser("b-002")])
-  .getOrElse(() => [])
+```ts
+fromPromise(() => fetch("/api/user").then((r) => r.json()))
+  .map((user) => user.name)
   .run();
 ```
 
-::: tip Key takeaway
-`TaskEither` makes the error type visible in the signature and forces you to handle it. Use it for any async operation that can fail - API requests, file reads, database queries.
-:::
+</div>
 
-**Dive deeper into `TaskEither`:** See the [TaskEither guide](./task-either.md) for all available methods and patterns.
+<div class="effect-card">
+
+<a href="./task-either.html" class="effect-title">TaskEither</a>
+
+Lazy async with typed errors. Combines Task + Either.
+
+```ts
+const fetchUser = tryCatch(
+  () => fetch("/api/user").then((r) => r.json()),
+  (err) => `Failed: ${err}`,
+);
+```
+
+</div>
+
+<style>
+.hero {
+  text-align: center;
+  padding: 1rem 0 4rem;
+}
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--vp-c-brand-1);
+  margin: 0 0 0.75rem;
+  line-height: 1.1;
+}
+.hero-tagline {
+  font-size: 1.25rem;
+  color: var(--vp-c-text-2);
+  margin: 0;
+}
+.video-wrapper {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.video-iframe {
+  border-radius: 8px;
+  max-width: 100%;
+}
+.video-caption {
+  font-size: 0.95rem;
+  color: var(--vp-c-text-2);
+  margin: 0;
+  font-weight: 500;
+}
+.effect-card {
+  position: relative;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 1.25rem 1.25rem 0;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.effect-card:hover {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+.effect-card div[class*="language-"] {
+  margin: 0.75rem -1.25rem 0;
+  border-radius: 0 0 8px 8px;
+}
+.effect-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--vp-c-brand-1);
+  text-decoration: none !important;
+  transition: color 0.25s;
+}
+.effect-card:hover .effect-title {
+  color: var(--vp-c-brand-2);
+  text-decoration: none !important;
+}
+.effect-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.effect-card > p {
+  margin: 0.25rem 0 0;
+  color: var(--vp-c-text-2);
+  font-size: 0.95rem;
+}
+</style>
