@@ -12,11 +12,11 @@ It provides a minimal set of **typed effects**: composable, type-safe wrappers f
 
 | Effect                                      | Description                                                                                                                   |
 | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [`Option<T>`](./docs/option.md)             | A value that may or may not be present. Use instead of `null`/`undefined`.                                                    |
-| [`Either<E, T>`](./docs/either.md)          | A computation that succeeds with `T` or fails with a typed error `E`. Errors are explicit and must be handled.                |
-| [`Validation<E, T>`](./docs/validation.md)  | Like `Either`, but accumulates **all** errors instead of stopping at the first one. Ideal for form and config validation.     |
-| [`Task<T>`](./docs/task.md)                 | A lazy async computation that always succeeds. Executes only when `.run()` is called - unlike Promises, which are eager.      |
-| [`TaskEither<E, T>`](./docs/task-either.md) | A lazy async computation that can succeed with `T` or fail with `E`. Combines `Task`'s laziness with `Either`'s typed errors. |
+| [`Option<T>`](https://pwlmc.github.io/ok-fp/option)             | A value that may or may not be present. Use instead of `null`/`undefined`.                                                    |
+| [`Either<E, T>`](https://pwlmc.github.io/ok-fp/either)          | A computation that succeeds with `T` or fails with a typed error `E`. Errors are explicit and must be handled.                |
+| [`Validation<E, T>`](https://pwlmc.github.io/ok-fp/validation)  | Like `Either`, but accumulates **all** errors instead of stopping at the first one. Ideal for form and config validation.     |
+| [`Task<T>`](https://pwlmc.github.io/ok-fp/task)                 | A lazy async computation that always succeeds. Executes only when `.run()` is called - unlike Promises, which are eager.      |
+| [`TaskEither<E, T>`](https://pwlmc.github.io/ok-fp/task-either) | A lazy async computation that can succeed with `T` or fail with `E`. Combines `Task`'s laziness with `Either`'s typed errors. |
 
 ## Installation
 
