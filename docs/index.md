@@ -8,7 +8,7 @@
 OK-FP is a small, focused functional programming toolkit for TypeScript. It provides composable, type-safe wrappers for optional values, errors, and async computations. If you're new to Effect Data Types, the video below gives a quick introduction to the core ideas behind the library.
 
 <div class="video-wrapper">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/-aNP5pisXWY?start=21" title="Introduction to OK-FP (Riga Frontend Meetup)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="video-iframe"></iframe>
+  <iframe src="https://www.youtube.com/embed/-aNP5pisXWY?start=21" title="Introduction to OK-FP (Riga Frontend Meetup)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="video-iframe"></iframe>
   <p class="video-caption">Introduction to OK-FP (FrontEnd Meetup Riga)</p>
 </div>
 
@@ -36,7 +36,7 @@ $ yarn add ok-fp
 
 <div class="effect-card">
 
-<a href="./option.html" class="effect-title">Option</a>
+<a href="/ok-fp/option" class="effect-title">Option</a>
 
 A value that might not exist, a type-safe alternative to `null` checks.
 
@@ -50,7 +50,7 @@ some("Alice")
 
 <div class="effect-card">
 
-<a href="./either.html" class="effect-title">Either</a>
+<a href="/ok-fp/either" class="effect-title">Either</a>
 
 Success or typed error. Stops at the first failure.
 
@@ -67,7 +67,7 @@ right(25)
 
 <div class="effect-card">
 
-<a href="./validation.html" class="effect-title">Validation</a>
+<a href="/ok-fp/validation" class="effect-title">Validation</a>
 
 Like Either, but accumulates **all** errors. Ideal for forms and config.
 
@@ -80,7 +80,7 @@ map2(validateName(name), validateAge(age), (name, age) => ({ name, age }));
 
 <div class="effect-card">
 
-<a href="./task.html" class="effect-title">Task</a>
+<a href="/ok-fp/task" class="effect-title">Task</a>
 
 Lazy async computation. Nothing runs until you call `.run()`.
 
@@ -94,7 +94,7 @@ fromPromise(() => fetch("/api/user").then((r) => r.json()))
 
 <div class="effect-card">
 
-<a href="./task-either.html" class="effect-title">TaskEither</a>
+<a href="/ok-fp/task-either" class="effect-title">TaskEither</a>
 
 Lazy async with typed errors. Combines Task + Either.
 
@@ -107,7 +107,7 @@ const fetchUser = tryCatch(
 
 </div>
 
-<style>
+<style scoped>
 .hero {
   text-align: center;
   padding: 1rem 0 4rem;
@@ -132,8 +132,10 @@ const fetchUser = tryCatch(
   gap: 0.5rem;
 }
 .video-iframe {
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 16 / 9;
   border-radius: 8px;
-  max-width: 100%;
 }
 .video-caption {
   font-size: 0.95rem;
@@ -157,6 +159,8 @@ const fetchUser = tryCatch(
 .effect-card div[class*="language-"] {
   margin: 0.75rem -1.25rem 0;
   border-radius: 0 0 8px 8px;
+  position: relative;
+  z-index: 1;
 }
 .effect-title {
   font-size: 1.2rem;
@@ -173,6 +177,7 @@ const fetchUser = tryCatch(
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 0;
 }
 .effect-card > p {
   margin: 0.25rem 0 0;
