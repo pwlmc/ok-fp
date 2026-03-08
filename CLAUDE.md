@@ -8,6 +8,7 @@ Single-package library (not a monorepo):
 
 - `src/` - Source code, one directory per effect type
 - `docs/` - VitePress documentation site
+- `decisions/` - Architecture Decision Records (ADRs)
 - `dist/` - Build output (not committed)
 
 Each effect type follows the same layout:
@@ -88,6 +89,12 @@ After a batch of code changes, verify that QA scripts pass (`lint`, `typecheck`,
 - Use vitest (`describe`, `it`, `expect`)
 - Test behavior, not implementation. Prefer testing public API surfaces.
 - Algebraic law tests (functor, monad, applicative) use shared helpers from `src/testUtils/`
+
+### Architecture Decisions
+
+- Architectural decisions are recorded as ADRs in `decisions/`, using the template in `decisions/adr-template.md`.
+- Read existing ADRs before proposing changes that contradict them.
+- When a decision is made that affects the project's architecture, create a new ADR.
 
 ### Commits & PRs
 
