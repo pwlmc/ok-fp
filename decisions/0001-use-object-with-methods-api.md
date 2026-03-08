@@ -47,7 +47,7 @@ Chosen option: **object with methods**, because:
 3. It matches what TypeScript developers already expect from APIs like `Array`, `Promise`, and `Map`.
 
 For additional context, read the
-["Source Code Is Not Going Anywhere... I Hope"](https://pwlmc.dev/posts/ok-fp-breaks-a-core-functional-programming-rule-on-purpose/)
+["OK-FP Breaks A Core Functional Programming Rule"](https://pwlmc.dev/posts/ok-fp-breaks-a-core-functional-programming-rule-on-purpose/)
 blog post where the reasons for the decision are discussed in more depth.
 
 ### Consequences
