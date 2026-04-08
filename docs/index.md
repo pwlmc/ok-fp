@@ -8,7 +8,7 @@
 OK-FP is a small, focused functional programming toolkit for TypeScript. It provides composable, type-safe wrappers for optional values, errors, and async computations. If you're new to Effect Data Types, the video below gives a quick introduction to the core ideas behind the library.
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/-aNP5pisXWY?start=21" title="Introduction to OK-FP (Riga Frontend Meetup)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="video-iframe"></iframe>
+  <iframe src="https://www.youtube.com/embed/-aNP5pisXWY?start=91" title="Introduction to OK-FP (Riga Frontend Meetup)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="video-iframe"></iframe>
   <p class="video-caption">Introduction to OK-FP (FrontEnd Meetup Riga)</p>
 </div>
 
