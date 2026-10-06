@@ -1,3 +1,7 @@
+---
+description: Learn how to use Option in TypeScript to represent present or absent values without null and undefined checks.
+---
+
 # Option
 
 `Option<T>` represents a value that may or may not exist. It is a type-safe alternative to `null`, `undefined`, or optional chaining.

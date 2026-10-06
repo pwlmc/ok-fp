@@ -1,3 +1,7 @@
+---
+description: Learn how to use TaskEither in TypeScript for lazy asynchronous computations with explicit typed errors.
+---
+
 # TaskEither
 
 `TaskEither<E, T>` represents a **lazy asynchronous computation** that can succeed with a value of type `T` or fail with an error of type `E`.

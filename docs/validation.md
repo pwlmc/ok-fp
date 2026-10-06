@@ -1,3 +1,7 @@
+---
+description: Learn how to use Validation in TypeScript to accumulate independent errors instead of stopping at the first failure.
+---
+
 # Validation
 
 `Validation<E, T>` represents a computation that can succeed with a value (`Valid`) or fail with **accumulated** errors (`Invalid`).

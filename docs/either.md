@@ -1,3 +1,7 @@
+---
+description: Learn how to use Either in TypeScript for type-safe error handling with explicit success and failure values.
+---
+
 # Either
 
 `Either<E, T>` represents a computation that can succeed with a value (`Right`) or fail with a typed error (`Left`).

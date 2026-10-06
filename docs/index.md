@@ -1,9 +1,13 @@
+---
+description: Get started with OK-FP, a TypeScript library for composable Option, Either, Validation, Task, and TaskEither effects.
+---
+
 <div class="hero">
-  <h1 class="hero-title">OK-FP</h1>
+  <div class="hero-title">OK-FP</div>
   <p class="hero-tagline">Essential Effect Data Types for TypeScript</p>
 </div>
 
-# Getting Started
+# OK-FP: Effect Data Types for TypeScript
 
 OK-FP is a small, focused functional programming toolkit for TypeScript. It provides composable, type-safe wrappers for optional values, errors, and async computations. If you're new to Effect Data Types, the video below gives a quick introduction to the core ideas behind the library.
 

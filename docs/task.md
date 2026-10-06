@@ -1,3 +1,7 @@
+---
+description: Learn how to use Task in TypeScript for lazy, composable asynchronous computations that always succeed.
+---
+
 # Task
 
 `Task<T>` represents a **lazy asynchronous computation** that always succeeds with a value of type `T`.

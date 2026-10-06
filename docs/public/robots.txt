@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pwlmc.github.io/ok-fp/sitemap.xml
