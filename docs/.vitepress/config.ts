@@ -46,7 +46,7 @@ export default defineConfig({
 		],
 		socialLinks: [{ icon: "github", link: "https://github.com/pwlmc/ok-fp" }],
 		outline: {
-			level: [2, 3],
+			level: [2, 4],
 		},
 	},
 });

@@ -17,7 +17,7 @@ export {
 } from "./taskEither/index.js";
 export type { TaskEitherValue } from "./taskEither/model.js";
 
-export { Validation } from "./validation/index.js";
+export { invalid, Validation, valid } from "./validation/index.js";
 export type {
 	Invalid,
 	Valid,

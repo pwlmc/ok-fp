@@ -16,7 +16,7 @@ Throwing exceptions is the most common way to handle errors in JavaScript, but i
 `Either` makes errors **explicit and typed**. The caller always knows that a function can fail - and _how_ it can fail - because the error type is right there in the signature.
 
 ```ts
-import { type Either, right, left } from "ok-fp/either";
+import { type Either, right, left } from "ok-fp";
 
 // Without Either: throws, caller has no idea what can go wrong
 function unsafeParse(input: string): number {
@@ -39,12 +39,12 @@ safeParse("abc").match(
 ### Creating an Either
 
 ```ts
-import { right, left, fromNullable, tryCatch } from "ok-fp/either";
+import { Either, right, left } from "ok-fp";
 
 const success = right(42); // right(42)
 const failure = left("something wrong"); // left("something wrong")
-const fromNull = fromNullable(null, () => "was null"); // left("was null")
-const safe = tryCatch(
+const fromNull = Either.fromNullable(null, () => "was null"); // left("was null")
+const safe = Either.tryCatch(
   () => JSON.parse('{"a":1}'),
   (err) => "parse failed",
 ); // right({ a: 1 })
@@ -53,7 +53,7 @@ const safe = tryCatch(
 ### Transforming and Chaining
 
 ```ts
-import { type Either, right, left } from "ok-fp/either";
+import { type Either, right, left } from "ok-fp";
 
 const parseNumber = (input: string): Either<string, number> => {
   const n = Number(input);
@@ -76,7 +76,7 @@ compute("abc"); // left("Not a number")
 ### Extracting the Value
 
 ```ts
-import { type Either, right, left } from "ok-fp/either";
+import { type Either, right, left } from "ok-fp";
 
 const x: Either<string, number> = right(42);
 x.getOrElse(() => 0); // 42
@@ -94,7 +94,9 @@ const result = x.match(
 
 ## API Reference
 
-### right
+### Construct
+
+#### right
 
 ```ts
 right<T, E = never>(value: T): Either<E, T>
@@ -103,13 +105,15 @@ right<T, E = never>(value: T): Either<E, T>
 Create an Either containing a success value.
 
 ```ts
+import { right } from "ok-fp";
+
 right(42); // right(42)
 right("hello"); // right("hello")
 ```
 
 ---
 
-### left
+#### left
 
 ```ts
 left<E, T = never>(error: E): Either<E, T>
@@ -118,68 +122,77 @@ left<E, T = never>(error: E): Either<E, T>
 Create an Either containing an error value.
 
 ```ts
+import { left } from "ok-fp";
+
 left("something went wrong"); // left("something went wrong")
 left(404); // left(404)
 ```
 
 ---
 
-### fromNullable
+#### Either.fromNullable
 
 ```ts
-fromNullable<E, T>(value: T | null | undefined, onNullish: () => E): Either<E, T>
+Either.fromNullable<E, T>(value: T | null | undefined, onNullish: () => E): Either<E, T>
 ```
 
 Convert a nullable value to Either. Returns `Right` if the value is present, `Left` with the provided error otherwise.
 
 ```ts
-fromNullable("hello", () => "empty"); // right("hello")
-fromNullable(null, () => "empty"); // left("empty")
-fromNullable(undefined, () => "empty"); // left("empty")
+import { Either } from "ok-fp";
+
+Either.fromNullable("hello", () => "empty"); // right("hello")
+Either.fromNullable(null, () => "empty"); // left("empty")
+Either.fromNullable(undefined, () => "empty"); // left("empty")
 ```
 
 ---
 
-### tryCatch
+#### Either.tryCatch
 
 ```ts
-tryCatch<E, T>(fn: () => T, onThrow: (err: unknown) => E): Either<E, T>
+Either.tryCatch<E, T>(fn: () => T, onThrow: (err: unknown) => E): Either<E, T>
 ```
 
 Safely execute a function that might throw. Catches exceptions and wraps them in Left.
 
 ```ts
-tryCatch(
+import { Either } from "ok-fp";
+
+Either.tryCatch(
   () => JSON.parse('{"a":1}'),
   (err) => "parse failed",
 );
 // right({ a: 1 })
 
-tryCatch(
+Either.tryCatch(
   () => JSON.parse("invalid"),
   (err) => "parse failed",
 );
-// left("parse failed")
 ```
 
 ---
 
-### fromOption
+#### Either.fromOption
 
 ```ts
-fromOption<E, T>(opt: Option<T>, onNone: () => E): Either<E, T>
+Either.fromOption<E, T>(opt: Option<T>, onNone: () => E): Either<E, T>
 ```
 
 Convert an Option to Either. Some becomes Right, None becomes Left with the provided error.
 
 ```ts
-fromOption(some(42), () => "empty"); // right(42)
-fromOption(none(), () => "empty"); // left("empty")
+import { Either, none, some } from "ok-fp";
+
+Either.fromOption(some(42), () => "empty"); // right(42)
+Either.fromOption(none(), () => "empty"); // left("empty")
 ```
 
 ---
 
-### map
+### Transform
+
+#### map
 
 ```ts
 map<U>(f: (value: T) => U): Either<E, U>
@@ -188,13 +201,15 @@ map<U>(f: (value: T) => U): Either<E, U>
 Transform the Right value. Left is passed through unchanged.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right(5).map((n) => n * 2); // right(10)
 left("error").map((n) => n * 2); // left("error")
 ```
 
 ---
 
-### filterOrElse
+#### filterOrElse
 
 ```ts
 filterOrElse(predicate: (value: T) => boolean, onLeft: () => E): Either<E, T>
@@ -203,14 +218,18 @@ filterOrElse(predicate: (value: T) => boolean, onLeft: () => E): Either<E, T>
 Keep the Right value only if the predicate holds. Returns Left with the provided error otherwise.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right(5).filterOrElse(
   (n) => n > 3,
   () => "too small",
 ); // right(5)
+
 right(2).filterOrElse(
   (n) => n > 3,
   () => "too small",
 ); // left("too small")
+
 left("error").filterOrElse(
   (n) => n > 3,
   () => "too small",
@@ -219,7 +238,7 @@ left("error").filterOrElse(
 
 ---
 
-### swap
+#### swap
 
 ```ts
 swap(): Either<T, E>
@@ -228,13 +247,15 @@ swap(): Either<T, E>
 Swap the Left and Right sides of the Either.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right(42).swap(); // left(42)
 left("error").swap(); // right("error")
 ```
 
 ---
 
-### flatMap
+#### flatMap
 
 ```ts
 flatMap<EE, U>(f: (value: T) => Either<EE, U>): Either<E | EE, U>
@@ -243,6 +264,8 @@ flatMap<EE, U>(f: (value: T) => Either<EE, U>): Either<E | EE, U>
 Chain Either-returning operations. Short-circuits to Left if this Either is Left.
 
 ```ts
+import { left, right } from "ok-fp";
+
 const safeDivide = (x: number, y: number) =>
   y === 0 ? left("Division by zero") : right(x / y);
 
@@ -253,7 +276,7 @@ left("error").flatMap((x) => safeDivide(x, 2)); // left("error")
 
 ---
 
-### flatten
+#### flatten
 
 ```ts
 flatten(): Either<E | EE, U>  // where this is Either<E, Either<EE, U>>
@@ -262,6 +285,8 @@ flatten(): Either<E | EE, U>  // where this is Either<E, Either<EE, U>>
 Remove one level of nesting from a nested Either.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right(right(42)).flatten(); // right(42)
 right(left("inner error")).flatten(); // left("inner error")
 left("outer error").flatten(); // left("outer error")
@@ -269,7 +294,7 @@ left("outer error").flatten(); // left("outer error")
 
 ---
 
-### orElse
+#### orElse
 
 ```ts
 orElse<EE>(fallback: (error: E) => Either<EE, T>): Either<E | EE, T>
@@ -278,6 +303,8 @@ orElse<EE>(fallback: (error: E) => Either<EE, T>): Either<E | EE, T>
 Return this Either if Right, otherwise recover from the error with a fallback.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right(42).orElse((err) => right(0)); // right(42)
 left("error").orElse((err) => right(0)); // right(0)
 left("error").orElse((err) => left("still bad")); // left("still bad")
@@ -285,7 +312,9 @@ left("error").orElse((err) => left("still bad")); // left("still bad")
 
 ---
 
-### zip
+### Combine
+
+#### zip
 
 ```ts
 zip<EE, A>(eitherA: Either<EE, A>): Either<E | EE, readonly [T, A]>
@@ -294,6 +323,8 @@ zip<EE, A>(eitherA: Either<EE, A>): Either<E | EE, readonly [T, A]>
 Combine two Eithers into a tuple. Returns the first Left if either is Left.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right("Alice").zip(right(30)); // right(["Alice", 30])
 right("Alice").zip(left("No age")); // left("No age")
 left("No name").zip(right(30)); // left("No name")
@@ -301,7 +332,7 @@ left("No name").zip(right(30)); // left("No name")
 
 ---
 
-### ap
+#### ap
 
 ```ts
 ap<EE, A, U>(this: Either<E, (a: A) => U>, arg: Either<EE, A>): Either<E | EE, U>
@@ -310,6 +341,8 @@ ap<EE, A, U>(this: Either<E, (a: A) => U>, arg: Either<EE, A>): Either<E | EE, U
 Apply a function wrapped in an Either to a value wrapped in an Either.
 
 ```ts
+import { left, right } from "ok-fp";
+
 const add = (x: number) => (y: number) => x + y;
 right(add(5)).ap(right(3)); // right(8)
 right(add(5)).ap(left("err")); // left("err")
@@ -318,7 +351,7 @@ left("err").ap(right(3)); // left("err")
 
 ---
 
-### tap
+#### tap
 
 ```ts
 tap(sideEffect: (value: T) => void): Either<E, T>
@@ -327,13 +360,17 @@ tap(sideEffect: (value: T) => void): Either<E, T>
 Run a side effect if Right. Returns the original Either unchanged.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right(42).tap((v) => console.log("value:", v)); // right(42), logs "value: 42"
 left("error").tap((v) => console.log("value:", v)); // left("error"), no log
 ```
 
 ---
 
-### match
+### Inspect
+
+#### match
 
 ```ts
 match<U>(onLeft: (error: E) => U, onRight: (value: T) => U): U
@@ -342,6 +379,8 @@ match<U>(onLeft: (error: E) => U, onRight: (value: T) => U): U
 Pattern match on the Either.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right(42).match(
   (err) => `Error: ${err}`,
   (val) => `Value: ${val}`,
@@ -355,7 +394,7 @@ left("oops").match(
 
 ---
 
-### getOrElse
+#### getOrElse
 
 ```ts
 getOrElse(fallback: (error: E) => T): T
@@ -364,13 +403,15 @@ getOrElse(fallback: (error: E) => T): T
 Extract the Right value, or return a fallback computed from the Left.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right(42).getOrElse(() => 0); // 42
 left("error").getOrElse(() => 0); // 0
 ```
 
 ---
 
-### toResult
+#### toResult
 
 ```ts
 toResult(): Result<E, T>
@@ -379,13 +420,16 @@ toResult(): Result<E, T>
 Convert Either to a plain `Result` object: `{ ok: true, value: T }` or `{ ok: false, error: E }`.
 
 ```ts
+import { left, right } from "ok-fp";
+
 right(42).toResult(); // { ok: true, value: 42 }
 left("error").toResult(); // { ok: false, error: "error" }
 ```
 
 ---
+### Helpers
 
-### map2
+#### map2
 
 ```ts
 map2<EA, A, EB, B, C>(eitherA: Either<EA, A>, eitherB: Either<EB, B>, f: (a: A, b: B) => C): Either<EA | EB, C>
@@ -394,13 +438,15 @@ map2<EA, A, EB, B, C>(eitherA: Either<EA, A>, eitherB: Either<EB, B>, f: (a: A, 
 Combine two Eithers with a function. Returns the first Left if either is Left.
 
 ```ts
+import { map2, left, right } from "ok-fp";
+
 map2(right("John"), right("Doe"), (f, l) => `${f} ${l}`); // right("John Doe")
 map2(right("John"), left("missing"), (f, l) => `${f} ${l}`); // left("missing")
 ```
 
 ---
 
-### map3
+#### map3
 
 ```ts
 map3<EA, A, EB, B, EC, C, D>(eitherA: Either<EA, A>, eitherB: Either<EB, B>, eitherC: Either<EC, C>, f: (a: A, b: B, c: C) => D): Either<EA | EB | EC, D>
@@ -409,20 +455,24 @@ map3<EA, A, EB, B, EC, C, D>(eitherA: Either<EA, A>, eitherB: Either<EB, B>, eit
 Combine three Eithers with a function. Returns the first Left if any is Left.
 
 ```ts
+import { map3, right } from "ok-fp";
+
 map3(right(1), right(2), right(3), (a, b, c) => a + b + c); // right(6)
 ```
 
 ---
 
-### sequence
+#### Either.sequence
 
 ```ts
-sequence<E, T>(eithers: Either<E, T>[]): Either<E, T[]>
+Either.sequence<E, T>(eithers: Either<E, T>[]): Either<E, T[]>
 ```
 
 Convert an array of Eithers to an Either of array. Returns the first Left if any element is Left.
 
 ```ts
-sequence([right(1), right(2), right(3)]); // right([1, 2, 3])
-sequence([right(1), left("error")]); // left("error")
+import { Either, left, right } from "ok-fp";
+
+Either.sequence([right(1), right(2), right(3)]); // right([1, 2, 3])
+Either.sequence([right(1), left("error")]); // left("error")
 ```

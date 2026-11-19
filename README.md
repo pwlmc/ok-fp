@@ -34,7 +34,7 @@ npm install ok-fp
 This example shows a small pipeline using `Option`.
 
 ```ts
-import { type Option, some, none } from "ok-fp/option";
+import { type Option, some, none } from "ok-fp";
 
 const parseNumber = (input: string): Option<number> => {
   const n = Number(input);

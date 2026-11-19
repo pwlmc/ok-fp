@@ -16,7 +16,7 @@ Nullable values (`null`, `undefined`) are a common source of runtime errors. The
 `Option` makes absence **explicit and type-safe**. You can't accidentally use a missing value - the compiler forces you to handle both cases.
 
 ```ts
-import { type Option, some, none } from "ok-fp/option";
+import { type Option, some, none } from "ok-fp";
 
 // Without Option: null is ambiguous and easy to forget
 function unsafeGet(id: string): User | null {
@@ -40,18 +40,18 @@ safeGet("123").match(
 ### Creating an Option
 
 ```ts
-import { some, none, fromNullable } from "ok-fp/option";
+import { Option, some, none } from "ok-fp";
 
 const hasValue = some(42); // some(42)
 const empty = none(); // none
-const fromNull = fromNullable(null); // none
-const fromValue = fromNullable("hello"); // some("hello")
+const fromNull = Option.fromNullable(null); // none
+const fromValue = Option.fromNullable("hello"); // some("hello")
 ```
 
 ### Transforming and Chaining
 
 ```ts
-import { type Option, some, none } from "ok-fp/option";
+import { type Option, some, none } from "ok-fp";
 
 const parseNumber = (input: string): Option<number> => {
   const n = Number(input);
@@ -79,7 +79,7 @@ compute("abc"); // returns none() (fails parsing)
 ### Extracting the Value
 
 ```ts
-import { type Option, some, none } from "ok-fp/option";
+import { type Option, some, none } from "ok-fp";
 
 const x: Option<number> = some(42);
 x.getOrElse(() => 0); // 42
@@ -99,7 +99,9 @@ const result = x.match(
 
 ## API Reference
 
-### some
+### Construct
+
+#### some
 
 ```ts
 some<T>(value: T): Option<T>
@@ -108,13 +110,15 @@ some<T>(value: T): Option<T>
 Create an Option containing a value.
 
 ```ts
+import { some } from "ok-fp";
+
 some(42); // some(42)
 some("hello"); // some("hello")
 ```
 
 ---
 
-### none
+#### none
 
 ```ts
 none<T>(): Option<T>
@@ -123,44 +127,52 @@ none<T>(): Option<T>
 Create an Option representing absence.
 
 ```ts
+import { none } from "ok-fp";
+
 none(); // none
 none<number>(); // none (typed)
 ```
 
 ---
 
-### fromNullable
+#### Option.fromNullable
 
 ```ts
-fromNullable<T>(value: T | null | undefined): Option<T>
+Option.fromNullable<T>(value: T | null | undefined): Option<T>
 ```
 
 Convert a nullable value to Option. Returns `some` if the value is not `null`/`undefined`, otherwise `None`.
 
 ```ts
-fromNullable(42); // some(42)
-fromNullable(null); // none
-fromNullable(undefined); // none
+import { Option } from "ok-fp";
+
+Option.fromNullable(42); // some(42)
+Option.fromNullable(null); // none
+Option.fromNullable(undefined); // none
 ```
 
 ---
 
-### fromEither
+#### Option.fromEither
 
 ```ts
-fromEither<L, R>(either: Either<L, R>): Option<R>
+Option.fromEither<L, R>(either: Either<L, R>): Option<R>
 ```
 
 Convert an Either to an Option. Right becomes some, Left becomes None.
 
 ```ts
-fromEither(right(42)); // some(42)
-fromEither(left("error")); // none
+import { Option, left, right } from "ok-fp";
+
+Option.fromEither(right(42)); // some(42)
+Option.fromEither(left("error")); // none
 ```
 
 ---
 
-### map
+### Transform
+
+#### map
 
 ```ts
 map<U>(f: (value: T) => U): Option<U>
@@ -169,13 +181,15 @@ map<U>(f: (value: T) => U): Option<U>
 Transform the value if present. Returns None if the Option is None.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(5).map((n) => n * 2); // some(10)
 none<number>().map((n) => n * 2); // none
 ```
 
 ---
 
-### filter
+#### filter
 
 ```ts
 filter(predicate: (value: T) => boolean): Option<T>
@@ -184,13 +198,15 @@ filter(predicate: (value: T) => boolean): Option<T>
 Keep the value only if the predicate holds. Returns None otherwise.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(5).filter((n) => n > 3); // some(5)
 some(2).filter((n) => n > 3); // none
 ```
 
 ---
 
-### flatMap
+#### flatMap
 
 ```ts
 flatMap<U>(f: (value: T) => Option<U>): Option<U>
@@ -199,6 +215,8 @@ flatMap<U>(f: (value: T) => Option<U>): Option<U>
 Chain Option-returning operations. Short-circuits to None if this Option is None.
 
 ```ts
+import { none, some } from "ok-fp";
+
 const safeDivide = (x: number) => (x === 0 ? none() : some(10 / x));
 some(2).flatMap(safeDivide); // some(5)
 some(0).flatMap(safeDivide); // none
@@ -207,7 +225,7 @@ none().flatMap(safeDivide); // none
 
 ---
 
-### flatten
+#### flatten
 
 ```ts
 flatten(): Option<U>  // where this is Option<Option<U>>
@@ -216,13 +234,15 @@ flatten(): Option<U>  // where this is Option<Option<U>>
 Remove one level of nesting from a nested Option.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(some(5)).flatten(); // some(5)
 some(none<number>()).flatten(); // none
 ```
 
 ---
 
-### orElse
+#### orElse
 
 ```ts
 orElse(fallback: () => Option<T>): Option<T>
@@ -231,13 +251,17 @@ orElse(fallback: () => Option<T>): Option<T>
 Return this Option if it contains a value, otherwise return the fallback. The fallback is lazily evaluated.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(5).orElse(() => some(10)); // some(5)
 none().orElse(() => some(10)); // some(10)
 ```
 
 ---
 
-### zip
+### Combine
+
+#### zip
 
 ```ts
 zip<A>(optA: Option<A>): Option<readonly [T, A]>
@@ -246,13 +270,15 @@ zip<A>(optA: Option<A>): Option<readonly [T, A]>
 Combine two Options into a tuple. Returns None if either is None.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some("Alice").zip(some(30)); // some(["Alice", 30])
 some("Alice").zip(none()); // none
 ```
 
 ---
 
-### ap
+#### ap
 
 ```ts
 ap<A, U>(this: Option<(arg: A) => U>, optA: Option<A>): Option<U>
@@ -261,6 +287,8 @@ ap<A, U>(this: Option<(arg: A) => U>, optA: Option<A>): Option<U>
 Apply a function wrapped in an Option to a value wrapped in an Option.
 
 ```ts
+import { none, some } from "ok-fp";
+
 const add = (x: number) => (y: number) => x + y;
 some(add(5)).ap(some(3)); // some(8)
 some(add(5)).ap(none()); // none
@@ -268,7 +296,7 @@ some(add(5)).ap(none()); // none
 
 ---
 
-### tap
+#### tap
 
 ```ts
 tap(sideEffect: (value: T) => unknown): Option<T>
@@ -277,13 +305,15 @@ tap(sideEffect: (value: T) => unknown): Option<T>
 Run a side effect if some. Returns the original Option unchanged.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(5).tap((v) => console.log("value:", v)); // some(5), logs "value: 5"
 none().tap((v) => console.log("value:", v)); // none, no log
 ```
 
 ---
 
-### tapNone
+#### tapNone
 
 ```ts
 tapNone(sideEffect: () => unknown): Option<T>
@@ -292,13 +322,17 @@ tapNone(sideEffect: () => unknown): Option<T>
 Run a side effect if None. Returns the original Option unchanged.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(5).tapNone(() => console.log("empty")); // some(5), no log
 none().tapNone(() => console.log("empty")); // none, logs "empty"
 ```
 
 ---
 
-### match
+### Inspect
+
+#### match
 
 ```ts
 match<U>(onNone: () => U, onSome: (value: T) => U): U
@@ -307,10 +341,13 @@ match<U>(onNone: () => U, onSome: (value: T) => U): U
 Pattern match on the Option.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(5).match(
   () => "empty",
   (x) => `value: ${x}`,
 ); // "value: 5"
+
 none().match(
   () => "empty",
   (x) => `value: ${x}`,
@@ -319,7 +356,7 @@ none().match(
 
 ---
 
-### getOrElse
+#### getOrElse
 
 ```ts
 getOrElse(fallback: () => T): T
@@ -328,13 +365,15 @@ getOrElse(fallback: () => T): T
 Extract the value, or return a fallback if None. The fallback is lazily evaluated.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(5).getOrElse(() => 0); // 5
 none().getOrElse(() => 0); // 0
 ```
 
 ---
 
-### toNullable
+#### toNullable
 
 ```ts
 toNullable(): T | null
@@ -343,13 +382,15 @@ toNullable(): T | null
 Convert the Option to a nullable value. Returns the value if some, `null` if None.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(5).toNullable(); // 5
 none().toNullable(); // null
 ```
 
 ---
 
-### toArray
+#### toArray
 
 ```ts
 toArray(): readonly T[]
@@ -358,13 +399,17 @@ toArray(): readonly T[]
 Convert the Option to an array. Returns a single-element array if some, empty array if None.
 
 ```ts
+import { none, some } from "ok-fp";
+
 some(42).toArray(); // [42]
 none().toArray(); // []
 ```
 
 ---
 
-### map2
+### Helpers
+
+#### map2
 
 ```ts
 map2<A, B, C>(optA: Option<A>, optB: Option<B>, f: (a: A, b: B) => C): Option<C>
@@ -373,13 +418,15 @@ map2<A, B, C>(optA: Option<A>, optB: Option<B>, f: (a: A, b: B) => C): Option<C>
 Combine two Options with a function. Returns None if either is None.
 
 ```ts
+import { map2, none, some } from "ok-fp";
+
 map2(some("John"), some("Doe"), (f, l) => `${f} ${l}`); // some("John Doe")
 map2(some("John"), none(), (f, l) => `${f} ${l}`); // none
 ```
 
 ---
 
-### map3
+#### map3
 
 ```ts
 map3<A, B, C, D>(optA: Option<A>, optB: Option<B>, optC: Option<C>, f: (a: A, b: B, c: C) => D): Option<D>
@@ -388,20 +435,24 @@ map3<A, B, C, D>(optA: Option<A>, optB: Option<B>, optC: Option<C>, f: (a: A, b:
 Combine three Options with a function. Returns None if any is None.
 
 ```ts
+import { map3, some } from "ok-fp";
+
 map3(some(1), some(2), some(3), (a, b, c) => a + b + c); // some(6)
 ```
 
 ---
 
-### sequence
+#### Option.sequence
 
 ```ts
-sequence<T>(opts: Option<T>[]): Option<T[]>
+Option.sequence<T>(opts: Option<T>[]): Option<T[]>
 ```
 
 Convert an array of Options to an Option of array. Returns None if any element is None.
 
 ```ts
-sequence([some(1), some(2), some(3)]); // some([1, 2, 3])
-sequence([some(1), none(), some(3)]); // none
+import { Option, none, some } from "ok-fp";
+
+Option.sequence([some(1), some(2), some(3)]); // some([1, 2, 3])
+Option.sequence([some(1), none(), some(3)]); // none
 ```
