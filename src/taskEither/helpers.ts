@@ -11,11 +11,13 @@ import { createTaskEither, type TaskEither } from "./taskEither.js";
  *
  * @example
  * ```typescript
- * await all([taskEither(1), taskEither(2), taskEither(3)]).run() // Right([1, 2, 3])
- * await all([taskEither(1), taskLeft("err"), taskEither(3)]).run() // Left("err")
+ * await allTaskEithers([taskEither(1), taskEither(2), taskEither(3)]).run() // Right([1, 2, 3])
+ * await allTaskEithers([taskEither(1), taskLeft("err"), taskEither(3)]).run() // Left("err")
  * ```
  */
-export function all<E, T>(taskEithers: TaskEither<E, T>[]): TaskEither<E, T[]> {
+export function allTaskEithers<E, T>(
+	taskEithers: TaskEither<E, T>[],
+): TaskEither<E, T[]> {
 	return createTaskEither(() =>
 		Promise.all(taskEithers.map((te) => te.run())).then((eithers) => {
 			const out: T[] = [];

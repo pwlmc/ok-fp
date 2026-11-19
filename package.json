@@ -31,6 +31,10 @@
   },
   "main": "dist/",
   "exports": {
+    "./helpers": {
+      "types": "./dist/helpers.d.mts",
+      "default": "./dist/helpers.mjs"
+    },
     "./either": {
       "types": "./dist/either.d.mts",
       "default": "./dist/either.mjs"

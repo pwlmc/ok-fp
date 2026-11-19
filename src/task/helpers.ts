@@ -9,9 +9,9 @@ import { createTask, type Task } from "./task.js";
  *
  * @example
  * ```typescript
- * await all([task(1), task(2), task(3)]).run() // [1, 2, 3]
+ * await allTasks([task(1), task(2), task(3)]).run() // [1, 2, 3]
  * ```
  */
-export function all<T>(tasks: Task<T>[]): Task<T[]> {
+export function allTasks<T>(tasks: Task<T>[]): Task<T[]> {
 	return createTask(() => Promise.all(tasks.map((t) => t.run())));
 }
