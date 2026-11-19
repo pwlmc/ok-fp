@@ -4,6 +4,18 @@ import type { Task } from "../task/task.js";
 import type { TaskEither } from "../taskEither/taskEither.js";
 import type { Validation } from "../validation/validation.js";
 
+type Map3Applicative = {
+	map: (
+		mapper: (value: unknown) => (value: unknown) => (value: unknown) => unknown,
+	) => {
+		ap: (value: unknown) => {
+			ap: (value: unknown) => unknown;
+		};
+	};
+};
+
+type Map3Mapper = (first: unknown, second: unknown, third: unknown) => unknown;
+
 /**
  * Combines three Options using a mapping function.
  * Only applies the mapper if all three Options contain values.
@@ -113,22 +125,8 @@ export function map3(
 	third: unknown,
 	mapper: unknown,
 ): unknown {
-	const applicative = first as {
-		map: (
-			mapper: (
-				value: unknown,
-			) => (value: unknown) => (value: unknown) => unknown,
-		) => {
-			ap: (value: unknown) => {
-				ap: (value: unknown) => unknown;
-			};
-		};
-	};
-	const combine = mapper as (
-		first: unknown,
-		second: unknown,
-		third: unknown,
-	) => unknown;
+	const applicative = first as Map3Applicative;
+	const combine = mapper as Map3Mapper;
 
 	return applicative
 		.map(

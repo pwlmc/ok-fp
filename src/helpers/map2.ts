@@ -4,6 +4,14 @@ import type { Task } from "../task/task.js";
 import type { TaskEither } from "../taskEither/taskEither.js";
 import type { Validation } from "../validation/validation.js";
 
+type Map2Applicative = {
+	map: (mapper: (value: unknown) => (value: unknown) => unknown) => {
+		ap: (value: unknown) => unknown;
+	};
+};
+
+type Map2Mapper = (first: unknown, second: unknown) => unknown;
+
 /**
  * Combines two Options using a mapping function.
  * Only applies the mapper if both Options contain values.
@@ -102,12 +110,8 @@ export function map2(
 	second: unknown,
 	mapper: unknown,
 ): unknown {
-	const applicative = first as {
-		map: (mapper: (value: unknown) => (value: unknown) => unknown) => {
-			ap: (value: unknown) => unknown;
-		};
-	};
-	const combine = mapper as (first: unknown, second: unknown) => unknown;
+	const applicative = first as Map2Applicative;
+	const combine = mapper as Map2Mapper;
 
 	return applicative
 		.map((firstValue) => (secondValue) => combine(firstValue, secondValue))
