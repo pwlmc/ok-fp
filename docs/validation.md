@@ -20,7 +20,7 @@ Both `Either` and `Validation` model computations that can fail, but they behave
 - **You are sequencing operations** - chaining `flatMap` through a series of transformations.
 
 ```ts
-import { right, left } from "ok-fp/either";
+import { right, left } from "ok-fp";
 
 const parseAge = (input: string) => {
   const n = Number(input);
@@ -45,7 +45,7 @@ parseAge("abc")
 - **You want all errors at once** - reporting every problem in a form, a config file, or a batch of inputs in a single pass.
 
 ```ts
-import { valid, invalid, map2 } from "ok-fp/validation";
+import { invalid, map2, valid } from "ok-fp";
 
 const validateName = (name: string) =>
   name.length > 0 ? valid(name) : invalid("Name is required");
@@ -74,21 +74,20 @@ map2(validateName(""), validateAge(-1), (name, age) => ({ name, age })).match(
 ### The key difference in action
 
 ```ts
-import * as Either from "ok-fp/either";
-import * as Validation from "ok-fp/validation";
+import { invalid, left, map2 } from "ok-fp";
 
 // Either: stops at the first error
-Either.map2(
-  Either.left("Name is required"),
-  Either.left("Age must be positive"),
+map2(
+  left("Name is required"),
+  left("Age must be positive"),
   (name, age) => ({ name, age }),
 );
 // Left("Name is required")  ← second error is never seen
 
 // Validation: collects all errors
-Validation.map2(
-  Validation.invalid("Name is required"),
-  Validation.invalid("Age must be positive"),
+map2(
+  invalid("Name is required"),
+  invalid("Age must be positive"),
   (name, age) => ({ name, age }),
 );
 // invalid(["Name is required", "Age must be positive"])  ← both errors reported
@@ -98,21 +97,37 @@ Validation.map2(
 
 ### Creating a Validation
 
+#### Create directly
+
 ```ts
-import { valid, invalid, fromEither, fromOption } from "ok-fp/validation";
+import { invalid, valid } from "ok-fp";
 
 const success = valid(42); // valid(42)
 const failure = invalid("Something went wrong"); // invalid(["Something went wrong"])
-const fromRight = fromEither(right(42)); // valid(42)
-const fromLeft = fromEither(left("error")); // invalid(["error"])
-const fromSome = fromOption(some(42), () => "missing"); // valid(42)
-const fromNone = fromOption(none(), () => "missing"); // invalid(["missing"])
+```
+
+#### Create from Either
+
+```ts
+import { Validation, left, right } from "ok-fp";
+
+const fromRight = Validation.fromEither(right(42)); // valid(42)
+const fromLeft = Validation.fromEither(left("error")); // invalid(["error"])
+```
+
+#### Create from Option
+
+```ts
+import { Validation, none, some } from "ok-fp";
+
+const fromSome = Validation.fromOption(some(42), () => "missing"); // valid(42)
+const fromNone = Validation.fromOption(none(), () => "missing"); // invalid(["missing"])
 ```
 
 ### Combining Independent Validations
 
 ```ts
-import { valid, invalid, map2, map3 } from "ok-fp/validation";
+import { invalid, map2, map3, valid } from "ok-fp";
 
 const validateName = (name: string) =>
   name.trim().length > 0 ? valid(name.trim()) : invalid("Name is required");
@@ -139,7 +154,7 @@ map3(
 ### Extracting the Value
 
 ```ts
-import { valid, invalid } from "ok-fp/validation";
+import { invalid, valid } from "ok-fp";
 
 const x = valid(42);
 x.getOrElse(() => 0); // 42
@@ -159,7 +174,9 @@ const result = x.match(
 
 ## API Reference
 
-### valid
+### Construct
+
+#### valid
 
 ```ts
 valid<T, E = never>(value: T): Validation<E, T>
@@ -168,13 +185,15 @@ valid<T, E = never>(value: T): Validation<E, T>
 Create a Validation containing a success value.
 
 ```ts
+import { valid } from "ok-fp";
+
 valid(42); // valid(42)
 valid("hello"); // valid("hello")
 ```
 
 ---
 
-### invalid
+#### invalid
 
 ```ts
 invalid<E, T = never>(error: E): Validation<E, T>
@@ -183,43 +202,51 @@ invalid<E, T = never>(error: E): Validation<E, T>
 Create a Validation containing a single error. The error is wrapped in an array internally.
 
 ```ts
+import { invalid } from "ok-fp";
+
 invalid("Something went wrong"); // invalid(["Something went wrong"])
 invalid(404); // invalid([404])
 ```
 
 ---
 
-### fromEither
+#### Validation.fromEither
 
 ```ts
-fromEither<E, T>(either: Either<E, T>): Validation<E, T>
+Validation.fromEither<E, T>(either: Either<E, T>): Validation<E, T>
 ```
 
 Convert an Either to a Validation. `Right` becomes `Valid`, `Left` becomes `Invalid` with a single error.
 
 ```ts
-fromEither(right(42)); // valid(42)
-fromEither(left("error")); // invalid(["error"])
+import { Validation, left, right } from "ok-fp";
+
+Validation.fromEither(right(42)); // valid(42)
+Validation.fromEither(left("error")); // invalid(["error"])
 ```
 
 ---
 
-### fromOption
+#### Validation.fromOption
 
 ```ts
-fromOption<E, T>(opt: Option<T>, onNone: () => E): Validation<E, T>
+Validation.fromOption<E, T>(opt: Option<T>, onNone: () => E): Validation<E, T>
 ```
 
 Convert an Option to a Validation. `Some` becomes `Valid`, `None` becomes `Invalid` with the provided error.
 
 ```ts
-fromOption(some(42), () => "missing"); // valid(42)
-fromOption(none(), () => "missing"); // invalid(["missing"])
+import { Validation, none, some } from "ok-fp";
+
+Validation.fromOption(some(42), () => "missing"); // valid(42)
+Validation.fromOption(none(), () => "missing"); // invalid(["missing"])
 ```
 
 ---
 
-### map
+### Transform
+
+#### map
 
 ```ts
 map<U>(mapper: (value: T) => U): Validation<E, U>
@@ -228,13 +255,15 @@ map<U>(mapper: (value: T) => U): Validation<E, U>
 Transform the Valid value. Invalid is passed through unchanged.
 
 ```ts
+import { invalid, valid } from "ok-fp";
+
 valid(5).map((n) => n * 2); // valid(10)
 invalid("error").map((n) => n * 2); // invalid(["error"])
 ```
 
 ---
 
-### filterOrElse
+#### filterOrElse
 
 ```ts
 filterOrElse(predicate: (value: T) => boolean, onInvalid: () => E): Validation<E, T>
@@ -243,14 +272,18 @@ filterOrElse(predicate: (value: T) => boolean, onInvalid: () => E): Validation<E
 Keep the Valid value only if the predicate holds. Returns Invalid with the provided error otherwise.
 
 ```ts
+import { invalid, valid } from "ok-fp";
+
 valid(5).filterOrElse(
   (n) => n > 3,
   () => "too small",
 ); // valid(5)
+
 valid(2).filterOrElse(
   (n) => n > 3,
   () => "too small",
 ); // invalid(["too small"])
+
 invalid("error").filterOrElse(
   (n) => n > 3,
   () => "too small",
@@ -259,7 +292,9 @@ invalid("error").filterOrElse(
 
 ---
 
-### ap
+### Combine
+
+#### ap
 
 ```ts
 ap<EE, A, U>(this: Validation<E, (a: A) => U>, arg: Validation<EE, A>): Validation<E | EE, U>
@@ -268,6 +303,8 @@ ap<EE, A, U>(this: Validation<E, (a: A) => U>, arg: Validation<EE, A>): Validati
 Apply a function wrapped in a Validation to a value wrapped in a Validation. Unlike `Either.ap`, if both are Invalid **errors are accumulated**.
 
 ```ts
+import { invalid, valid } from "ok-fp";
+
 const add = (x: number) => (y: number) => x + y;
 valid(add(5)).ap(valid(3)); // valid(8)
 valid(add(5)).ap(invalid("err")); // invalid(["err"])
@@ -276,7 +313,7 @@ invalid("e1").ap(invalid("e2")); // invalid(["e1", "e2"]) ← errors accumulated
 
 ---
 
-### zip
+#### zip
 
 ```ts
 zip<EE, A>(valA: Validation<EE, A>): Validation<E | EE, readonly [T, A]>
@@ -285,6 +322,8 @@ zip<EE, A>(valA: Validation<EE, A>): Validation<E | EE, readonly [T, A]>
 Combine two Validations into a tuple. If both are Valid, returns Valid with a tuple. If either is Invalid, accumulates all errors.
 
 ```ts
+import { invalid, valid } from "ok-fp";
+
 valid("Alice").zip(valid(30)); // valid(["Alice", 30])
 valid("Alice").zip(invalid("No age")); // invalid(["No age"])
 invalid("e1").zip(invalid("e2")); // invalid(["e1", "e2"])
@@ -292,7 +331,7 @@ invalid("e1").zip(invalid("e2")); // invalid(["e1", "e2"])
 
 ---
 
-### tap
+#### tap
 
 ```ts
 tap(sideEffect: (value: T) => void): Validation<E, T>
@@ -301,13 +340,15 @@ tap(sideEffect: (value: T) => void): Validation<E, T>
 Run a side effect if Valid. Returns the original Validation unchanged.
 
 ```ts
+import { invalid, valid } from "ok-fp";
+
 valid(42).tap((v) => console.log("value:", v)); // valid(42), logs "value: 42"
 invalid("err").tap((v) => console.log("value:", v)); // invalid(["err"]), no log
 ```
 
 ---
 
-### tapInvalid
+#### tapInvalid
 
 ```ts
 tapInvalid(sideEffect: (errors: readonly E[]) => void): Validation<E, T>
@@ -316,13 +357,17 @@ tapInvalid(sideEffect: (errors: readonly E[]) => void): Validation<E, T>
 Run a side effect if Invalid. Returns the original Validation unchanged.
 
 ```ts
+import { invalid, valid } from "ok-fp";
+
 valid(42).tapInvalid((errs) => console.log(errs)); // valid(42), no log
 invalid("err").tapInvalid((errs) => console.log(errs)); // invalid(["err"]), logs ["err"]
 ```
 
 ---
 
-### match
+### Inspect
+
+#### match
 
 ```ts
 match<U>(onInvalid: (errors: readonly E[]) => U, onValid: (value: T) => U): U
@@ -331,6 +376,8 @@ match<U>(onInvalid: (errors: readonly E[]) => U, onValid: (value: T) => U): U
 Pattern match on the Validation.
 
 ```ts
+import { invalid, valid } from "ok-fp";
+
 valid(42).match(
   (errors) => `Errors: ${errors.join(", ")}`,
   (val) => `Value: ${val}`,
@@ -344,7 +391,7 @@ invalid("oops").match(
 
 ---
 
-### getOrElse
+#### getOrElse
 
 ```ts
 getOrElse(fallback: (errors: readonly E[]) => T): T
@@ -353,13 +400,15 @@ getOrElse(fallback: (errors: readonly E[]) => T): T
 Extract the Valid value, or return a fallback computed from the errors.
 
 ```ts
+import { invalid, valid } from "ok-fp";
+
 valid(42).getOrElse(() => 0); // 42
 invalid("error").getOrElse(() => 0); // 0
 ```
 
 ---
 
-### toResult
+#### toResult
 
 ```ts
 toResult(): ValidationResult<E, T>
@@ -368,13 +417,17 @@ toResult(): ValidationResult<E, T>
 Convert Validation to a plain `ValidationResult` object: `{ ok: true, value: T }` or `{ ok: false, errors: readonly E[] }`.
 
 ```ts
+import { invalid, valid } from "ok-fp";
+
 valid(42).toResult(); // { ok: true, value: 42 }
 invalid("error").toResult(); // { ok: false, errors: ["error"] }
 ```
 
 ---
 
-### map2
+### Helpers
+
+#### map2
 
 ```ts
 map2<EA, A, EB, B, C>(valA: Validation<EA, A>, valB: Validation<EB, B>, mapper: (a: A, b: B) => C): Validation<EA | EB, C>
@@ -383,13 +436,15 @@ map2<EA, A, EB, B, C>(valA: Validation<EA, A>, valB: Validation<EB, B>, mapper: 
 Combine two Validations with a function. Accumulates all errors from both if either is Invalid.
 
 ```ts
+import { invalid, map2, valid } from "ok-fp";
+
 map2(valid("John"), valid("Doe"), (f, l) => `${f} ${l}`); // valid("John Doe")
 map2(invalid("e1"), invalid("e2"), (f, l) => `${f} ${l}`); // invalid(["e1", "e2"])
 ```
 
 ---
 
-### map3
+#### map3
 
 ```ts
 map3<EA, A, EB, B, EC, C, D>(valA: Validation<EA, A>, valB: Validation<EB, B>, valC: Validation<EC, C>, mapper: (a: A, b: B, c: C) => D): Validation<EA | EB | EC, D>
@@ -398,21 +453,47 @@ map3<EA, A, EB, B, EC, C, D>(valA: Validation<EA, A>, valB: Validation<EB, B>, v
 Combine three Validations with a function. Accumulates all errors from all three if any are Invalid.
 
 ```ts
-map3(valid(1), valid(2), valid(3), (a, b, c) => a + b + c); // valid(6)
-map3(invalid("e1"), valid(2), invalid("e3"), (a, b, c) => a + b + c); // invalid(["e1", "e3"])
+import { invalid, map3, valid } from "ok-fp";
+
+map3(
+  valid(1),
+  valid(2),
+  valid(3),
+  (a, b, c) => a + b + c,
+); // valid(6)
+
+map3(
+  invalid("e1"),
+  valid(2),
+  invalid("e3"),
+  (a, b, c) => a + b + c,
+); // invalid(["e1", "e3"])
 ```
 
 ---
 
-### sequence
+#### Validation.sequence
 
 ```ts
-sequence<E, T>(validations: readonly Validation<E, T>[]): Validation<E, T[]>
+Validation.sequence<E, T>(
+  validations: readonly Validation<E, T>[],
+): Validation<E, T[]>
 ```
 
 Convert an array of Validations to a Validation of array. Returns Valid with all values if all are Valid, otherwise accumulates all errors.
 
 ```ts
-sequence([valid(1), valid(2), valid(3)]); // valid([1, 2, 3])
-sequence([valid(1), invalid("e1"), invalid("e2")]); // invalid(["e1", "e2"])
+import { Validation, invalid, valid } from "ok-fp";
+
+Validation.sequence([
+  valid(1),
+  valid(2),
+  valid(3),
+]); // valid([1, 2, 3])
+
+Validation.sequence([
+  valid(1),
+  invalid("e1"),
+  invalid("e2"),
+]); // invalid(["e1", "e2"])
 ```

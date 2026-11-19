@@ -45,6 +45,8 @@ $ yarn add ok-fp
 A value that might not exist, a type-safe alternative to `null` checks.
 
 ```ts
+import { some } from "ok-fp";
+
 some("Alice")
   .map((name) => `Hello, ${name}!`)
   .getOrElse(() => "User not found");
@@ -59,6 +61,8 @@ some("Alice")
 Success or typed error. Stops at the first failure.
 
 ```ts
+import { right } from "ok-fp";
+
 right(25)
   .map((age) => age + 1)
   .match(
@@ -76,8 +80,13 @@ right(25)
 Like Either, but accumulates **all** errors. Ideal for forms and config.
 
 ```ts
-map2(validateName(name), validateAge(age), (name, age) => ({ name, age }));
-// Invalid(["Name required", "Must be 18+"])
+import { invalid, map2 } from "ok-fp";
+
+map2(
+  invalid("Name required"),
+  invalid("Must be 18+"),
+  (name, age) => ({ name, age }),
+);
 ```
 
 </div>
@@ -89,7 +98,9 @@ map2(validateName(name), validateAge(age), (name, age) => ({ name, age }));
 Lazy async computation. Nothing runs until you call `.run()`.
 
 ```ts
-fromPromise(() => fetch("/api/user").then((r) => r.json()))
+import { Task } from "ok-fp";
+
+Task.fromPromise(() => fetch("/api/user").then((r) => r.json()))
   .map((user) => user.name)
   .run();
 ```
@@ -103,7 +114,9 @@ fromPromise(() => fetch("/api/user").then((r) => r.json()))
 Lazy async with typed errors. Combines Task + Either.
 
 ```ts
-const fetchUser = tryCatch(
+import { TaskEither } from "ok-fp";
+
+const fetchUser = TaskEither.tryCatch(
   () => fetch("/api/user").then((r) => r.json()),
   (err) => `Failed: ${err}`,
 );
