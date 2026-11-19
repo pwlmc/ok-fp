@@ -1,4 +1,4 @@
-import type { Option } from "../option.js";
+import type { Option } from "../option/option.js";
 import { createEither, type Either } from "./either.js";
 
 /**

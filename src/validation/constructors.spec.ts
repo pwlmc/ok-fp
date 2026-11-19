@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { left, right } from "../either.js";
-import { none, some } from "../option.js";
+import { left, right } from "../either/constructors.js";
+import { none, some } from "../option/constructors.js";
 import { fromEither, fromOption, invalid, valid } from "./constructors.js";
 
 describe("validation constructors", () => {
@@ -21,7 +21,10 @@ describe("validation constructors", () => {
 
 	describe("fromEither", () => {
 		it("should create valid from right", () => {
-			expect(fromEither(right(42)).toResult()).toEqual({ ok: true, value: 42 });
+			expect(fromEither(right(42)).toResult()).toEqual({
+				ok: true,
+				value: 42,
+			});
 		});
 
 		it("should create invalid with single error from left", () => {

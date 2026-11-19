@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { none, some } from "../option.js";
+import { none, some } from "../option/constructors.js";
 import {
 	fromNullable,
 	fromOption,

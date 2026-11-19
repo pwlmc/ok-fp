@@ -1,5 +1,5 @@
-import type { Either } from "../either.js";
-import type { Option } from "../option.js";
+import type { Either } from "../either/either.js";
+import type { Option } from "../option/option.js";
 import { createValidation, type Validation } from "./validation.js";
 
 /**

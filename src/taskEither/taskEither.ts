@@ -14,7 +14,7 @@ export type TaskEither<E, T> = {
 	 *
 	 * @example
 	 * ```typescript
-	 * taskEither(5).map(x => x * 2).run()         // Promise<Right(10)>
+	 * taskRight(5).map(x => x * 2).run()         // Promise<Right(10)>
 	 * taskLeft("error").map(x => x * 2).run()     // Promise<Left("error")>
 	 * ```
 	 */
@@ -31,7 +31,7 @@ export type TaskEither<E, T> = {
 	 * @example
 	 * ```typescript
 	 * taskLeft("error").mapLeft(e => `mapped: ${e}`).run()  // Promise<Left("mapped: error")>
-	 * taskEither(42).mapLeft(e => `mapped: ${e}`).run()     // Promise<Right(42)>
+	 * taskRight(42).mapLeft(e => `mapped: ${e}`).run()     // Promise<Right(42)>
 	 * ```
 	 */
 	mapLeft: <F>(mapper: (left: E) => F) => TaskEither<F, T>;
@@ -49,8 +49,8 @@ export type TaskEither<E, T> = {
 	 * @example
 	 * ```typescript
 	 * const add = (x: number) => (y: number) => x + y;
-	 * taskEither(add(5)).ap(taskEither(3)).run()    // Promise<Right(8)>
-	 * taskEither(add(5)).ap(taskLeft("err")).run()  // Promise<Left("err")>
+	 * taskRight(add(5)).ap(taskRight(3)).run()    // Promise<Right(8)>
+	 * taskRight(add(5)).ap(taskLeft("err")).run()  // Promise<Left("err")>
 	 * ```
 	 */
 	ap: <EE, A, U>(
@@ -69,8 +69,8 @@ export type TaskEither<E, T> = {
 	 *
 	 * @example
 	 * ```typescript
-	 * taskEither("Alice").zip(taskEither(30)).run()       // Promise<Right(["Alice", 30])>
-	 * taskEither("Alice").zip(taskLeft("No age")).run()   // Promise<Left("No age")>
+	 * taskRight("Alice").zip(taskRight(30)).run()       // Promise<Right(["Alice", 30])>
+	 * taskRight("Alice").zip(taskLeft("No age")).run()   // Promise<Left("No age")>
 	 * ```
 	 */
 	zip: <EE, A>(other: TaskEither<EE, A>) => TaskEither<E | EE, readonly [T, A]>;
@@ -84,8 +84,8 @@ export type TaskEither<E, T> = {
 	 *
 	 * @example
 	 * ```typescript
-	 * taskEither(taskEither(42)).flatten().run()            // Promise<Right(42)>
-	 * taskEither(taskLeft("inner error")).flatten().run()   // Promise<Left("inner error")>
+	 * taskRight(taskRight(42)).flatten().run()            // Promise<Right(42)>
+	 * taskRight(taskLeft("inner error")).flatten().run()   // Promise<Left("inner error")>
 	 * ```
 	 */
 	flatten: <EE, U>(
@@ -103,8 +103,8 @@ export type TaskEither<E, T> = {
 	 *
 	 * @example
 	 * ```typescript
-	 * taskEither(10).flatMap(x => taskEither(x * 2)).run()  // Promise<Right(20)>
-	 * taskLeft("error").flatMap(x => taskEither(x)).run()   // Promise<Left("error")>
+	 * taskRight(10).flatMap(x => taskRight(x * 2)).run()  // Promise<Right(20)>
+	 * taskLeft("error").flatMap(x => taskRight(x)).run()   // Promise<Left("error")>
 	 * ```
 	 */
 	flatMap: <EE, U>(
@@ -120,7 +120,7 @@ export type TaskEither<E, T> = {
 	 *
 	 * @example
 	 * ```typescript
-	 * taskEither(42).tap(v => console.log(v)).run()    // Logs: 42, resolves to Right(42)
+	 * taskRight(42).tap(v => console.log(v)).run()    // Logs: 42, resolves to Right(42)
 	 * taskLeft("error").tap(v => console.log(v)).run() // No log, resolves to Left("error")
 	 * ```
 	 */
@@ -136,7 +136,7 @@ export type TaskEither<E, T> = {
 	 * @example
 	 * ```typescript
 	 * taskLeft("error").tapLeft(e => console.log(e)).run()  // Logs: "error", resolves to Left("error")
-	 * taskEither(42).tapLeft(e => console.log(e)).run()     // No log, resolves to Right(42)
+	 * taskRight(42).tapLeft(e => console.log(e)).run()     // No log, resolves to Right(42)
 	 * ```
 	 */
 	tapLeft: (sideEffect: (left: E) => unknown) => TaskEither<E, T>;
@@ -152,7 +152,7 @@ export type TaskEither<E, T> = {
 	 *
 	 * @example
 	 * ```typescript
-	 * await taskEither(5).match(() => 0, x => x * 2).run()      // 10
+	 * await taskRight(5).match(() => 0, x => x * 2).run()      // 10
 	 * await taskLeft("error").match(() => 0, x => x * 2).run()  // 0
 	 * ```
 	 */
@@ -167,7 +167,7 @@ export type TaskEither<E, T> = {
 	 *
 	 * @example
 	 * ```typescript
-	 * await taskEither(42).getOrElse(() => 0).run()          // 42
+	 * await taskRight(42).getOrElse(() => 0).run()          // 42
 	 * await taskLeft("error").getOrElse(() => 0).run()       // 0
 	 * ```
 	 */
@@ -182,8 +182,8 @@ export type TaskEither<E, T> = {
 	 *
 	 * @example
 	 * ```typescript
-	 * taskEither(42).orElse(() => taskEither(0)).run()          // Promise<Right(42)>
-	 * taskLeft("error").orElse(() => taskEither(0)).run()       // Promise<Right(0)>
+	 * taskRight(42).orElse(() => taskRight(0)).run()          // Promise<Right(42)>
+	 * taskLeft("error").orElse(() => taskRight(0)).run()       // Promise<Right(0)>
 	 * ```
 	 */
 	orElse: <EE>(
@@ -197,7 +197,7 @@ export type TaskEither<E, T> = {
 	 *
 	 * @example
 	 * ```typescript
-	 * const result = await taskEither(42).run(); // Either<never, number>
+	 * const result = await taskRight(42).run(); // Either<never, number>
 	 * ```
 	 */
 	run: () => Promise<Either<E, T>>;

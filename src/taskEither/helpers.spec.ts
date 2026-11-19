@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { left, right } from "../either/constructors.js";
-import { taskEither, taskLeft } from "./constructors.js";
+import { taskLeft, taskRight } from "./constructors.js";
 import { allTaskEithers } from "./helpers.js";
 
-describe("taskEither helpers", () => {
+describe("taskRight helpers", () => {
 	describe("allTaskEithers", () => {
-		it("should resolve all taskEithers and return a right with an array of values", async () => {
+		it("should resolve all taskRights and return a right with an array of values", async () => {
 			const result = await allTaskEithers([
-				taskEither(1),
-				taskEither(2),
-				taskEither(3),
+				taskRight(1),
+				taskRight(2),
+				taskRight(3),
 			]).run();
 			expect(result.toResult()).toEqual(right([1, 2, 3]).toResult());
 		});
@@ -19,12 +19,12 @@ describe("taskEither helpers", () => {
 			expect(result.toResult()).toEqual(right([]).toResult());
 		});
 
-		it("should return the first left if any taskEither is left", async () => {
+		it("should return the first left if any taskRight is left", async () => {
 			const error = new Error("test error");
 			const result = await allTaskEithers([
-				taskEither<number, Error>(1),
+				taskRight<number, Error>(1),
 				taskLeft<Error, number>(error),
-				taskEither<number, Error>(3),
+				taskRight<number, Error>(3),
 			]).run();
 			expect(result.toResult()).toEqual(left(error).toResult());
 		});

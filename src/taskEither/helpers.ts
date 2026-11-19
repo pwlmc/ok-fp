@@ -11,8 +11,8 @@ import { createTaskEither, type TaskEither } from "./taskEither.js";
  *
  * @example
  * ```typescript
- * await allTaskEithers([taskEither(1), taskEither(2), taskEither(3)]).run() // Right([1, 2, 3])
- * await allTaskEithers([taskEither(1), taskLeft("err"), taskEither(3)]).run() // Left("err")
+ * await allTaskEithers([taskRight(1), taskRight(2), taskRight(3)]).run() // Right([1, 2, 3])
+ * await allTaskEithers([taskRight(1), taskLeft("err"), taskRight(3)]).run() // Left("err")
  * ```
  */
 export function allTaskEithers<E, T>(

@@ -9,11 +9,11 @@ import { createValidation, type Validation } from "./validation.js";
  *
  * @example
  * ```typescript
- * sequenceValidations([valid(1), valid(2), valid(3)]) // Valid([1, 2, 3])
- * sequenceValidations([valid(1), invalid("e1"), invalid("e2")]) // Invalid(["e1", "e2"])
+ * sequence([valid(1), valid(2), valid(3)]) // Valid([1, 2, 3])
+ * sequence([valid(1), invalid("e1"), invalid("e2")]) // Invalid(["e1", "e2"])
  * ```
  */
-export function sequenceValidations<E, T>(
+export function sequence<E, T>(
 	validations: readonly Validation<E, T>[],
 ): Validation<E, T[]> {
 	const errors: E[] = [];
