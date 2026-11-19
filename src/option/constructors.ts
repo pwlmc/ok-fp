@@ -1,4 +1,4 @@
-import type { Either } from "../either.js";
+import type { Either } from "../either/either.js";
 import { NONE } from "./model.js";
 import { createOption, type Option } from "./option.js";
 

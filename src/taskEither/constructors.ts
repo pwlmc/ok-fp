@@ -3,7 +3,7 @@ import type { Either } from "../either/either.js";
 import type { Task } from "../task/task.js";
 import { createTaskEither, type TaskEither } from "./taskEither.js";
 
-export function taskEither<T, E = never>(value: T): TaskEither<E, T> {
+export function taskRight<T, E = never>(value: T): TaskEither<E, T> {
 	return createTaskEither(() => Promise.resolve(right<T, E>(value)));
 }
 

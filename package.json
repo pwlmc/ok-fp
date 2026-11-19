@@ -29,31 +29,11 @@
   "engines": {
     "node": ">=22"
   },
-  "main": "dist/",
+  "main": "./dist/index.mjs",
   "exports": {
-    "./helpers": {
-      "types": "./dist/helpers.d.mts",
-      "default": "./dist/helpers.mjs"
-    },
-    "./either": {
-      "types": "./dist/either.d.mts",
-      "default": "./dist/either.mjs"
-    },
-    "./option": {
-      "types": "./dist/option.d.mts",
-      "default": "./dist/option.mjs"
-    },
-    "./validation": {
-      "types": "./dist/validation.d.mts",
-      "default": "./dist/validation.mjs"
-    },
-    "./task": {
-      "types": "./dist/task.d.mts",
-      "default": "./dist/task.mjs"
-    },
-    "./taskEither": {
-      "types": "./dist/taskEither.d.mts",
-      "default": "./dist/taskEither.mjs"
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
     }
   },
   "files": [

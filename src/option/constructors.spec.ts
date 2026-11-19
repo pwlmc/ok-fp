@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { left, right } from "../either.js";
+import { left, right } from "../either/constructors.js";
 import { fromEither, fromNullable, none, some } from "./constructors.js";
 
 describe("option constructors", () => {
