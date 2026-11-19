@@ -26,6 +26,9 @@
   "license": "MIT",
   "author": "pwlmc",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "main": "dist/",
   "exports": {
     "./either": {
