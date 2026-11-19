@@ -1,48 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { invalid, valid } from "./constructors.js";
-import { map2, map3, sequence } from "./helpers.js";
+import { map3, sequence } from "./helpers.js";
 
 describe("validation helpers", () => {
-	describe("map2", () => {
-		it("should map valid values", () => {
-			const result = map2(valid(2), valid(3), (a, b) => a * b);
-			expect(result.toResult()).toEqual({ ok: true, value: 6 });
-		});
-
-		it("should accumulate errors when both are invalid", () => {
-			const mapper = vi.fn();
-			const result = map2(
-				invalid<string, number>("e1"),
-				invalid<string, number>("e2"),
-				mapper,
-			);
-			expect(result.toResult()).toEqual({ ok: false, errors: ["e1", "e2"] });
-			expect(mapper).not.toBeCalled();
-		});
-
-		it("should return invalid when first is invalid", () => {
-			const mapper = vi.fn();
-			const result = map2(
-				invalid<string, number>("e1"),
-				valid<number, string>(3),
-				mapper,
-			);
-			expect(result.toResult()).toEqual({ ok: false, errors: ["e1"] });
-			expect(mapper).not.toBeCalled();
-		});
-
-		it("should return invalid when second is invalid", () => {
-			const mapper = vi.fn();
-			const result = map2(
-				valid<number, string>(2),
-				invalid<string, number>("e2"),
-				mapper,
-			);
-			expect(result.toResult()).toEqual({ ok: false, errors: ["e2"] });
-			expect(mapper).not.toBeCalled();
-		});
-	});
-
 	describe("map3", () => {
 		it("should map valid values", () => {
 			const result = map3(valid(2), valid(3), valid(4), (a, b, c) => a + b + c);

@@ -1,31 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { left, right } from "./constructors.js";
-import { map2, map3, sequence } from "./helpers.js";
+import { map3, sequence } from "./helpers.js";
 
 describe("either helpers", () => {
-	describe("map2", () => {
-		it("should map right values", () => {
-			const a = right(2);
-			const b = right(3);
-			const c = map2(a, b, (a, b) => a * b);
-			expect(c.toResult()).toEqual(right(6).toResult());
-		});
-
-		it("should not call the mapper and return left when one of the values is left", () => {
-			const mapper = vi.fn();
-			const error = new Error("test error");
-			for (const eithers of [
-				[left<Error, number>(error), right<number, Error>(3)],
-				[right<number, Error>(2), left<Error, number>(error)],
-			]) {
-				const [a, b] = eithers;
-				const c = map2(a!, b!, mapper);
-				expect(c.toResult()).toEqual(left(error).toResult());
-				expect(mapper).not.toBeCalled();
-			}
-		});
-	});
-
 	describe("map3", () => {
 		it("should map right values", () => {
 			const a = right(2);

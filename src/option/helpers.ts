@@ -2,30 +2,6 @@ import { none, some } from "./constructors.js";
 import type { Option } from "./option.js";
 
 /**
- * Combines two Options using a mapping function.
- * Only applies the mapper if both Options contain values.
- *
- * @param optA - First Option to combine
- * @param optB - Second Option to combine
- * @param mapper - Function that combines both values
- * @returns Option containing the combined result, or None if either Option is None
- *
- * @example
- * ```typescript
- * const greet = (first, last) => `Hi ${first} ${last}!`
- * map2(some("John"), some("Doe"), greet) // Some("John Doe")
- * map2(some("John"), none<string>(), greet) // None
- * ```
- */
-export function map2<A, B, C>(
-	optA: Option<A>,
-	optB: Option<B>,
-	mapper: (a: A, b: B) => C,
-) {
-	return optA.map((a) => (b: B) => mapper(a, b)).ap(optB);
-}
-
-/**
  * Combines three Options using a mapping function.
  * Only applies the mapper if all three Options contain values.
  *
