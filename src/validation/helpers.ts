@@ -1,36 +1,6 @@
 import { createValidation, type Validation } from "./validation.js";
 
 /**
- * Combines three Validations using a mapping function.
- * If all are Valid, applies the mapper. If any are Invalid, accumulates all errors.
- *
- * @param valA - First Validation to combine
- * @param valB - Second Validation to combine
- * @param valC - Third Validation to combine
- * @param mapper - Function to combine all three valid values
- * @returns Validation containing the mapped result, or all accumulated errors
- *
- * @example
- * ```typescript
- * map3(valid(1), valid(2), valid(3), (a, b, c) => a + b + c)
- * // Valid(6)
- * map3(invalid("e1"), valid(2), invalid("e3"), mapper)
- * // Invalid(["e1", "e3"])
- * ```
- */
-export function map3<EA, A, EB, B, EC, C, D>(
-	valA: Validation<EA, A>,
-	valB: Validation<EB, B>,
-	valC: Validation<EC, C>,
-	mapper: (a: A, b: B, c: C) => D,
-) {
-	return valA
-		.map((a) => (b: B) => (c: C) => mapper(a, b, c))
-		.ap(valB)
-		.ap(valC);
-}
-
-/**
  * Converts an array of Validations into a Validation of array.
  * Returns Valid with all values if all Validations are Valid, otherwise accumulates all errors.
  *

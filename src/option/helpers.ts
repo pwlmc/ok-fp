@@ -2,35 +2,6 @@ import { none, some } from "./constructors.js";
 import type { Option } from "./option.js";
 
 /**
- * Combines three Options using a mapping function.
- * Only applies the mapper if all three Options contain values.
- *
- * @param optA - First Option to combine
- * @param optB - Second Option to combine
- * @param optC - Third Option to combine
- * @param mapper - Function that combines all three values
- * @returns Option containing the combined result, or None if any Option is None
- *
- * @example
- * ```typescript
- * const toDateString = (d, m, y) => `${d}/${m}/${y}`
- * map3(some(15), some(6), some(2023), toDateString) // Some("15/6/2023")
- * map3(some(15), some(6), none<number>(), toDateString) // None
- * ```
- */
-export function map3<A, B, C, D>(
-	optA: Option<A>,
-	optB: Option<B>,
-	optC: Option<C>,
-	mapper: (a: A, b: B, c: C) => D,
-) {
-	return optA
-		.map((a) => (b: B) => (c: C) => mapper(a, b, c))
-		.ap(optB)
-		.ap(optC);
-}
-
-/**
  * Converts an array of Options into an Option of array.
  * If all Options in the array contain values, returns Some containing an array of all values.
  * If any Option in the array is None, returns None.

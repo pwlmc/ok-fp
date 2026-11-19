@@ -2,34 +2,6 @@ import { left, right } from "./constructors.js";
 import type { Either } from "./either.js";
 
 /**
- * Combines three Eithers using a mapping function.
- * Returns the mapped result if all Eithers are Right, otherwise the first Left.
- *
- * @param eitherA - First Either to combine
- * @param eitherB - Second Either to combine
- * @param eitherC - Third Either to combine
- * @param mapper - Function to combine all three Right values
- * @returns Either containing the mapped result, or the first Left
- *
- * @example
- * ```typescript
- * map3(right(1), right(2), right(3), (a, b, c) => a + b + c)
- * // Right(6)
- * ```
- */
-export function map3<EA, A, EB, B, EC, C, D>(
-	eitherA: Either<EA, A>,
-	eitherB: Either<EB, B>,
-	eitherC: Either<EC, C>,
-	mapper: (a: A, b: B, c: C) => D,
-) {
-	return eitherA
-		.map((a) => (b: B) => (c: C) => mapper(a, b, c))
-		.ap(eitherB)
-		.ap(eitherC);
-}
-
-/**
  * Converts an array of Eithers into an Either of array.
  * Returns Right with all values if all Eithers are Right, otherwise the first Left.
  *
