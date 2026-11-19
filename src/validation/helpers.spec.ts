@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { invalid, valid } from "./constructors.js";
-import { sequence } from "./helpers.js";
+import { sequenceValidations } from "./helpers.js";
 
 describe("validation helpers", () => {
-	describe("sequence", () => {
+	describe("sequenceValidations", () => {
 		it("should return valid with array of values when all are valid", () => {
-			const result = sequence([valid(1), valid(2), valid(3)]);
+			const result = sequenceValidations([valid(1), valid(2), valid(3)]);
 			expect(result.toResult()).toEqual({ ok: true, value: [1, 2, 3] });
 		});
 
 		it("should accumulate all errors when some are invalid", () => {
-			const result = sequence([
+			const result = sequenceValidations([
 				valid<number, string>(1),
 				invalid<string, number>("e1"),
 				invalid<string, number>("e2"),
@@ -19,7 +19,7 @@ describe("validation helpers", () => {
 		});
 
 		it("should return valid with empty array for empty input", () => {
-			const result = sequence([]);
+			const result = sequenceValidations([]);
 			expect(result.toResult()).toEqual({ ok: true, value: [] });
 		});
 	});

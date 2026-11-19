@@ -11,11 +11,11 @@ import type { Option } from "./option.js";
  *
  * @example
  * ```typescript
- * sequence([some(1), some(2), some(3)]) // Some([1, 2, 3])
- * sequence([some(1), none(), some(3)]) // None
+ * sequenceOptions([some(1), some(2), some(3)]) // Some([1, 2, 3])
+ * sequenceOptions([some(1), none(), some(3)]) // None
  * ```
  */
-export function sequence<T>(opts: Option<T>[]): Option<T[]> {
+export function sequenceOptions<T>(opts: Option<T>[]): Option<T[]> {
 	const out: T[] = [];
 
 	for (const opt of opts) {

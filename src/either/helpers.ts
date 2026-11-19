@@ -10,11 +10,11 @@ import type { Either } from "./either.js";
  *
  * @example
  * ```typescript
- * sequence([right(1), right(2), right(3)]) // Right([1, 2, 3])
- * sequence([right(1), left("error")])      // Left("error")
+ * sequenceEithers([right(1), right(2), right(3)]) // Right([1, 2, 3])
+ * sequenceEithers([right(1), left("error")])      // Left("error")
  * ```
  */
-export function sequence<E, T>(eithers: Either<E, T>[]): Either<E, T[]> {
+export function sequenceEithers<E, T>(eithers: Either<E, T>[]): Either<E, T[]> {
 	const out: T[] = [];
 
 	for (const either of eithers) {
