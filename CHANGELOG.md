@@ -4,7 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ## [Next]
 
-TBA
+### Added
+
+- Companion APIs for each effect type: `Option`, `Either`, `Validation`, `Task`, and `TaskEither`.
+- Shared `map2` and `map3` helpers for combining values across all effect types.
+- Architecture decision records in the `decisions/` directory.
+
+### Changed
+
+- **BREAKING** All package APIs are now exported from `ok-fp`. The `ok-fp/option`, `ok-fp/either`,
+  `ok-fp/validation`, `ok-fp/task`, and `ok-fp/taskEither` entry points have been removed.
+- **BREAKING** `taskEither` has been renamed to `taskRight`.
+- **BREAKING** Task collection helpers have been renamed: `all` is now `allTasks` for `Task` and
+  `allTaskEithers` for `TaskEither`.
+- **BREAKING** Effect-specific `map2`, `map3`, and `sequence` exports have been removed. Import `map2` and `map3`
+  from `ok-fp`, and use `Option.sequence`, `Either.sequence`, or `Validation.sequence`.
+- **BREAKING** The minimum supported Node.js version is now 22.
+- Documentation now uses the unified package entry point and companion APIs.
 
 ## [0.2.2](https://github.com/pwlmc/okfp/compare/v0.2.1...v0.2.2) - 2026-02-26
 
