@@ -427,6 +427,9 @@ invalid("error").toResult(); // { ok: false, errors: ["error"] }
 
 ### Helpers
 
+`flatMap2` and `flatMap3` are intentionally unavailable for Validation. Dependent validation cannot preserve
+accumulation of errors from independent inputs.
+
 #### map2
 
 ```ts

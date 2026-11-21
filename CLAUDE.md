@@ -87,6 +87,7 @@ After a batch of code changes, verify that QA scripts pass (`lint`, `typecheck`,
 
 - Co-locate tests with source: `foo.ts` -> `foo.spec.ts`
 - Use vitest (`describe`, `it`, `expect`)
+- Name every test case using the `it("should ...", ...)` convention.
 - Test behavior, not implementation. Prefer testing public API surfaces.
 - Algebraic law tests (functor, monad, applicative) use shared helpers from `src/testUtils/`
 

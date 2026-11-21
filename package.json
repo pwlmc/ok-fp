@@ -1,60 +1,60 @@
 {
-  "name": "ok-fp",
-  "version": "0.3.0",
-  "description": "Essential Effect Data Types for TypeScript",
-  "keywords": [
-    "typescript",
-    "fp",
-    "functional-programming",
-    "effects",
-    "algebraic-data-types",
-    "monads",
-    "option",
-    "either",
-    "validation",
-    "task",
-    "taskEither"
-  ],
-  "homepage": "https://github.com/pwlmc/ok-fp#readme",
-  "bugs": {
-    "url": "https://github.com/pwlmc/ok-fp/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pwlmc/ok-fp.git"
-  },
-  "license": "MIT",
-  "author": "pwlmc",
-  "type": "module",
-  "engines": {
-    "node": ">=22"
-  },
-  "main": "./dist/index.mjs",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.mts",
-      "default": "./dist/index.mjs"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "lint": "biome check src/",
-    "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "build": "tsdown  --format esm --dts",
-    "dev": "tsdown --format esm --dts --watch",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.4.4",
-    "@vitest/coverage-v8": "^4.0.18",
-    "tsdown": "^0.20.3",
-    "typescript": "^5.9.3",
-    "vitepress": "^1.6.4",
-    "vitest": "^4.0.18"
-  }
+	"name": "ok-fp",
+	"version": "0.4.0",
+	"description": "Essential Effect Data Types for TypeScript",
+	"keywords": [
+		"typescript",
+		"fp",
+		"functional-programming",
+		"effects",
+		"algebraic-data-types",
+		"monads",
+		"option",
+		"either",
+		"validation",
+		"task",
+		"taskEither"
+	],
+	"homepage": "https://github.com/pwlmc/ok-fp#readme",
+	"bugs": {
+		"url": "https://github.com/pwlmc/ok-fp/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pwlmc/ok-fp.git"
+	},
+	"license": "MIT",
+	"author": "pwlmc",
+	"type": "module",
+	"engines": {
+		"node": ">=22"
+	},
+	"main": "./dist/index.mjs",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.mts",
+			"default": "./dist/index.mjs"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"lint": "biome check src/",
+		"test": "vitest",
+		"typecheck": "tsc --noEmit",
+		"build": "tsdown  --format esm --dts",
+		"dev": "tsdown --format esm --dts --watch",
+		"docs:dev": "vitepress dev docs",
+		"docs:build": "vitepress build docs",
+		"docs:preview": "vitepress preview docs"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.4",
+		"@vitest/coverage-v8": "^4.0.18",
+		"tsdown": "^0.20.3",
+		"typescript": "^5.9.3",
+		"vitepress": "^1.6.4",
+		"vitest": "^4.0.18"
+	}
 }

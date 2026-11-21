@@ -462,6 +462,49 @@ map3(right(1), right(2), right(3), (a, b, c) => a + b + c); // right(6)
 
 ---
 
+#### flatMap2
+
+```ts
+flatMap2<EA, A, EB, B, EC, C>(
+  eitherA: Either<EA, A>,
+  eitherB: Either<EB, B>,
+  f: (a: A, b: B) => Either<EC, C>,
+): Either<EA | EB | EC, C>
+```
+
+Combine two Eithers with a function that returns an Either, then flatten the result. Returns the first Left from the
+inputs or the returned Either.
+
+```ts
+import { flatMap2, left, right } from "ok-fp";
+
+flatMap2(right(2), right(3), (a, b) => (a + b > 0 ? right(a + b) : left("not positive"))); // right(5)
+```
+
+---
+
+#### flatMap3
+
+```ts
+flatMap3<EA, A, EB, B, EC, C, ED, D>(
+  eitherA: Either<EA, A>,
+  eitherB: Either<EB, B>,
+  eitherC: Either<EC, C>,
+  f: (a: A, b: B, c: C) => Either<ED, D>,
+): Either<EA | EB | EC | ED, D>
+```
+
+Combine three Eithers with a function that returns an Either, then flatten the result. Returns the first Left from the
+inputs or the returned Either.
+
+```ts
+import { flatMap3, right } from "ok-fp";
+
+flatMap3(right(1), right(2), right(3), (a, b, c) => right(a + b + c)); // right(6)
+```
+
+---
+
 #### Either.sequence
 
 ```ts

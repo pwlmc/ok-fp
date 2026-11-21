@@ -230,6 +230,88 @@ const result = await task(42).run(); // 42
 
 ### Helpers
 
+#### map2
+
+```ts
+map2<A, B, C>(
+  taskA: Task<A>,
+  taskB: Task<B>,
+  f: (a: A, b: B) => C,
+): Task<C>
+```
+
+Run two Tasks concurrently and map their values with a pure function.
+
+```ts
+import { map2, task } from "ok-fp";
+
+await map2(task(2), task(3), (a, b) => a * b).run(); // 6
+```
+
+---
+
+#### map3
+
+```ts
+map3<A, B, C, D>(
+  taskA: Task<A>,
+  taskB: Task<B>,
+  taskC: Task<C>,
+  f: (a: A, b: B, c: C) => D,
+): Task<D>
+```
+
+Run three Tasks concurrently and map their values with a pure function.
+
+```ts
+import { map3, task } from "ok-fp";
+
+await map3(task(2), task(3), task(4), (a, b, c) => a * b * c).run(); // 24
+```
+
+---
+
+#### flatMap2
+
+```ts
+flatMap2<A, B, C>(
+  taskA: Task<A>,
+  taskB: Task<B>,
+  f: (a: A, b: B) => Task<C>,
+): Task<C>
+```
+
+Run two Tasks concurrently, map their values to another Task, then flatten the result.
+
+```ts
+import { flatMap2, task } from "ok-fp";
+
+await flatMap2(task(2), task(3), (a, b) => task(a * b)).run(); // 6
+```
+
+---
+
+#### flatMap3
+
+```ts
+flatMap3<A, B, C, D>(
+  taskA: Task<A>,
+  taskB: Task<B>,
+  taskC: Task<C>,
+  f: (a: A, b: B, c: C) => Task<D>,
+): Task<D>
+```
+
+Run three Tasks concurrently, map their values to another Task, then flatten the result.
+
+```ts
+import { flatMap3, task } from "ok-fp";
+
+await flatMap3(task(2), task(3), task(4), (a, b, c) => task(a * b * c)).run(); // 24
+```
+
+---
+
 #### Task.all
 
 ```ts

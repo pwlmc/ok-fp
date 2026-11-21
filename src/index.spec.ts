@@ -23,7 +23,7 @@ import {
 } from "./index.js";
 
 describe("public API", () => {
-	it("exposes free constructors", async () => {
+	it("should expose free constructors", async () => {
 		const option: OptionType<number> = some(1);
 		const either: EitherType<string, number> = right(1);
 		const taskValue: TaskType<number> = task(1);
@@ -59,7 +59,7 @@ describe("public API", () => {
 		expect(Validation).not.toHaveProperty("invalid");
 	});
 
-	it("exposes scoped sequence operations", () => {
+	it("should expose scoped sequence operations", () => {
 		expect(Option.sequence([some(1), some(2)]).toNullable()).toEqual([1, 2]);
 		expect(Either.sequence([right(1), right(2)]).toResult()).toEqual({
 			ok: true,
