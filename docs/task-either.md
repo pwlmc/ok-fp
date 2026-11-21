@@ -413,6 +413,102 @@ const error = await taskLeft("oops").run(); // Left("oops")
 
 ### Helpers
 
+#### map2
+
+```ts
+map2<EA, A, EB, B, C>(
+  taskEitherA: TaskEither<EA, A>,
+  taskEitherB: TaskEither<EB, B>,
+  f: (a: A, b: B) => C,
+): TaskEither<EA | EB, C>
+```
+
+Run two TaskEithers concurrently and map their Right values with a pure function. Returns the first Left if either
+input is Left.
+
+```ts
+import { map2, taskRight } from "ok-fp";
+
+await map2(taskRight(2), taskRight(3), (a, b) => a * b).run(); // Right(6)
+```
+
+---
+
+#### map3
+
+```ts
+map3<EA, A, EB, B, EC, C, D>(
+  taskEitherA: TaskEither<EA, A>,
+  taskEitherB: TaskEither<EB, B>,
+  taskEitherC: TaskEither<EC, C>,
+  f: (a: A, b: B, c: C) => D,
+): TaskEither<EA | EB | EC, D>
+```
+
+Run three TaskEithers concurrently and map their Right values with a pure function. Returns the first Left if any
+input is Left.
+
+```ts
+import { map3, taskRight } from "ok-fp";
+
+await map3(
+  taskRight(2),
+  taskRight(3),
+  taskRight(4),
+  (a, b, c) => a * b * c,
+).run(); // Right(24)
+```
+
+---
+
+#### flatMap2
+
+```ts
+flatMap2<EA, A, EB, B, EC, C>(
+  taskEitherA: TaskEither<EA, A>,
+  taskEitherB: TaskEither<EB, B>,
+  f: (a: A, b: B) => TaskEither<EC, C>,
+): TaskEither<EA | EB | EC, C>
+```
+
+Run two TaskEithers concurrently, map their Right values to another TaskEither, then flatten the result. Returns the
+first Left from the inputs or the returned TaskEither.
+
+```ts
+import { flatMap2, taskRight } from "ok-fp";
+
+await flatMap2(taskRight(2), taskRight(3), (a, b) => taskRight(a * b)).run(); // Right(6)
+```
+
+---
+
+#### flatMap3
+
+```ts
+flatMap3<EA, A, EB, B, EC, C, ED, D>(
+  taskEitherA: TaskEither<EA, A>,
+  taskEitherB: TaskEither<EB, B>,
+  taskEitherC: TaskEither<EC, C>,
+  f: (a: A, b: B, c: C) => TaskEither<ED, D>,
+): TaskEither<EA | EB | EC | ED, D>
+```
+
+Run three TaskEithers concurrently, map their Right values to another TaskEither, then flatten the result. Returns the
+first Left from the inputs or the returned TaskEither.
+
+```ts
+import { flatMap3, taskRight } from "ok-fp";
+
+await flatMap3(
+  taskRight(2),
+  taskRight(3),
+  taskRight(4),
+  (a, b, c) => taskRight(a * b * c),
+).run(); // Right(24)
+```
+
+---
+
 #### TaskEither.all
 
 ```ts

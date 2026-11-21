@@ -442,6 +442,49 @@ map3(some(1), some(2), some(3), (a, b, c) => a + b + c); // some(6)
 
 ---
 
+#### flatMap2
+
+```ts
+flatMap2<A, B, C>(
+  optA: Option<A>,
+  optB: Option<B>,
+  f: (a: A, b: B) => Option<C>,
+): Option<C>
+```
+
+Combine two Options with a function that returns an Option, then flatten the result. Returns None if either input or
+the returned Option is None.
+
+```ts
+import { flatMap2, none, some } from "ok-fp";
+
+flatMap2(some(2), some(3), (a, b) => (a + b > 0 ? some(a + b) : none())); // some(5)
+```
+
+---
+
+#### flatMap3
+
+```ts
+flatMap3<A, B, C, D>(
+  optA: Option<A>,
+  optB: Option<B>,
+  optC: Option<C>,
+  f: (a: A, b: B, c: C) => Option<D>,
+): Option<D>
+```
+
+Combine three Options with a function that returns an Option, then flatten the result. Returns None if any input or
+the returned Option is None.
+
+```ts
+import { flatMap3, some } from "ok-fp";
+
+flatMap3(some(1), some(2), some(3), (a, b, c) => some(a + b + c)); // some(6)
+```
+
+---
+
 #### Option.sequence
 
 ```ts

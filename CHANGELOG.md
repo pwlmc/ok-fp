@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Next]
 
+TBA
+
+## [0.4.0](https://github.com/pwlmc/okfp/compare/v0.3.0...v0.4.0) - 2026-11-21
+
+### Added
+
+- Shared `flatMap2` and `flatMap3` helpers for combining and flattening `Option`, `Either`, `Task`, and `TaskEither`.
+
+## [0.3.0](https://github.com/pwlmc/okfp/compare/v0.2.2...v0.3.0) - 2026-11-20
+
 ### Added
 
 - Companion APIs for each effect type: `Option`, `Either`, `Validation`, `Task`, and `TaskEither`.
