@@ -511,7 +511,8 @@ Option.traverse<A, B>(
 ): Option<B[]>
 ```
 
-Map values to Options and collect their contents. Stops mapping and returns None when the mapper first returns None.
+Conceptually, this combines `map` and `sequence`: `Option.sequence(values.map(mapper))`. It traverses directly to
+avoid an intermediate array and stops invoking `mapper` after the first None.
 
 ```ts
 import { Option, none, some } from "ok-fp";

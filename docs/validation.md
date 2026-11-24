@@ -512,7 +512,8 @@ Validation.traverse<E, A, B>(
 ): Validation<E, B[]>
 ```
 
-Map every value to a Validation and collect the valid results. Accumulates all errors in input order.
+Conceptually, this combines `map` and `sequence`: `Validation.sequence(values.map(mapper))`. It traverses directly to
+avoid an intermediate array while still mapping every value and accumulating all errors in input order.
 
 ```ts
 import { Validation, invalid, valid } from "ok-fp";

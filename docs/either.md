@@ -531,7 +531,8 @@ Either.traverse<E, A, B>(
 ): Either<E, B[]>
 ```
 
-Map values to Eithers and collect their Right values. Stops mapping and returns the first Left.
+Conceptually, this combines `map` and `sequence`: `Either.sequence(values.map(mapper))`. It traverses directly to
+avoid an intermediate array and stops invoking `mapper` after the first Left.
 
 ```ts
 import { Either, left, right } from "ok-fp";
