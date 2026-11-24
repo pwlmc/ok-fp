@@ -19,14 +19,19 @@ export function fromTask<T, E = never>(t: Task<T>): TaskEither<E, T> {
 	return createTaskEither(() => t.run().then((value) => right<T, E>(value)));
 }
 
+export function tryCatch<T>(thunk: () => Promise<T>): TaskEither<unknown, T>;
 export function tryCatch<T, E>(
 	thunk: () => Promise<T>,
 	onThrow: (err: unknown) => E,
-): TaskEither<E, T> {
+): TaskEither<E, T>;
+export function tryCatch<T, E>(
+	thunk: () => Promise<T>,
+	onThrow?: (err: unknown) => E,
+): TaskEither<unknown, T> {
 	return createTaskEither(() =>
 		thunk().then(
-			(value) => right<T, E>(value),
-			(err) => left<E, T>(onThrow(err)),
+			(value) => right<T, unknown>(value),
+			(err) => left<unknown, T>(onThrow ? onThrow(err) : err),
 		),
 	);
 }

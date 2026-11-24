@@ -47,22 +47,29 @@ describe("either constructors", () => {
 	});
 
 	describe("tryCatch", () => {
-		it("should create right value when function return a result", () => {
-			const either = tryCatch(
-				() => 2,
-				(err) => err,
-			);
+		it("should create right value when function returns a result", () => {
+			const either = tryCatch(() => 2);
+
 			expect(either.toResult()).toEqual(right(2).toResult());
 		});
 
-		it("should create left value when function throws", () => {
-			const error = new Error("test error");
+		it("should map a thrown value when onThrow is provided", () => {
 			const either = tryCatch(
 				() => {
-					throw error;
+					throw new Error("test error");
 				},
-				(err) => err,
+				(err) => String(err),
 			);
+
+			expect(either.toResult()).toEqual(left("Error: test error").toResult());
+		});
+
+		it("should preserve a thrown value when onThrow is omitted", () => {
+			const error = { code: "test" };
+			const either = tryCatch(() => {
+				throw error;
+			});
+
 			expect(either.toResult()).toEqual(left(error).toResult());
 		});
 	});

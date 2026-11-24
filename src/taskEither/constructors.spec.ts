@@ -50,19 +50,26 @@ describe("taskRight constructors", () => {
 
 	describe("tryCatch", () => {
 		it("should create a right taskRight when promise resolves", async () => {
-			const te = tryCatch(
-				() => Promise.resolve(42),
-				(err) => err,
-			);
+			const te = tryCatch(() => Promise.resolve(42));
+
 			expect((await te.run()).toResult()).toEqual(right(42).toResult());
 		});
 
-		it("should create a left taskRight when promise rejects", async () => {
-			const error = new Error("async error");
+		it("should map a rejected value when onThrow is provided", async () => {
 			const te = tryCatch(
-				() => Promise.reject(error),
-				(err) => err as Error,
+				() => Promise.reject(new Error("async error")),
+				(err) => String(err),
 			);
+
+			expect((await te.run()).toResult()).toEqual(
+				left("Error: async error").toResult(),
+			);
+		});
+
+		it("should preserve a rejected value when onThrow is omitted", async () => {
+			const error = { code: "async" };
+			const te = tryCatch(() => Promise.reject(error));
+
 			expect((await te.run()).toResult()).toEqual(left(error).toResult());
 		});
 
