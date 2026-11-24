@@ -30,3 +30,28 @@ export function sequence<E, T>(
 		? createValidation({ invalid: errors })
 		: createValidation({ valid: values });
 }
+
+/**
+ * Maps every value to a Validation and collects the valid results.
+ * Accumulates all errors in input order.
+ */
+export function traverse<E, A, B>(
+	values: readonly A[],
+	mapper: (value: A) => Validation<E, B>,
+): Validation<E, B[]> {
+	const errors: E[] = [];
+	const out: B[] = [];
+
+	for (const value of values) {
+		const result = mapper(value).toResult();
+		if (result.ok) {
+			out.push(result.value);
+		} else {
+			errors.push(...result.errors);
+		}
+	}
+
+	return errors.length > 0
+		? createValidation({ invalid: errors })
+		: createValidation({ valid: out });
+}

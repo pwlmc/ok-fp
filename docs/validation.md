@@ -500,3 +500,25 @@ Validation.sequence([
   invalid("e2"),
 ]); // invalid(["e1", "e2"])
 ```
+
+---
+
+#### Validation.traverse
+
+```ts
+Validation.traverse<E, A, B>(
+  values: readonly A[],
+  mapper: (value: A) => Validation<E, B>,
+): Validation<E, B[]>
+```
+
+Conceptually, this combines `map` and `sequence`: `Validation.sequence(values.map(mapper))`. It traverses directly to
+avoid an intermediate array while still mapping every value and accumulating all errors in input order.
+
+```ts
+import { Validation, invalid, valid } from "ok-fp";
+
+Validation.traverse(["Ada", "", ""], (name) =>
+  name.length > 0 ? valid(name) : invalid("Name is required"),
+); // invalid(["Name is required", "Name is required"])
+```

@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 
 TBA
 
+## [0.6.0](https://github.com/pwlmc/okfp/compare/v0.5.0...v0.6.0) - 2026-11-24
+
+### Added
+
+- `Option.traverse`, `Either.traverse`, and `Validation.traverse` for mapping and collecting arrays while preserving
+  each effect's short-circuiting or error-accumulation semantics.
+
 ## [0.5.0](https://github.com/pwlmc/okfp/compare/v0.4.0...v0.5.0) - 2026-11-24
 
 ### Changed

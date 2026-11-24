@@ -499,3 +499,25 @@ import { Option, none, some } from "ok-fp";
 Option.sequence([some(1), some(2), some(3)]); // some([1, 2, 3])
 Option.sequence([some(1), none(), some(3)]); // none
 ```
+
+---
+
+#### Option.traverse
+
+```ts
+Option.traverse<A, B>(
+  values: readonly A[],
+  mapper: (value: A) => Option<B>,
+): Option<B[]>
+```
+
+Conceptually, this combines `map` and `sequence`: `Option.sequence(values.map(mapper))`. It traverses directly to
+avoid an intermediate array and stops invoking `mapper` after the first None.
+
+```ts
+import { Option, none, some } from "ok-fp";
+
+Option.traverse([1, 2, 3], (value) =>
+  value > 0 ? some(value * 2) : none(),
+); // some([2, 4, 6])
+```

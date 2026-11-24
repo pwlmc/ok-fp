@@ -28,3 +28,24 @@ export function sequence<T>(opts: Option<T>[]): Option<T[]> {
 
 	return some(out);
 }
+
+/**
+ * Maps values to Options and collects their contents.
+ * Stops at the first None without mapping the remaining values.
+ */
+export function traverse<A, B>(
+	values: readonly A[],
+	mapper: (value: A) => Option<B>,
+): Option<B[]> {
+	const out: B[] = [];
+
+	for (const value of values) {
+		const mapped = mapper(value).toArray();
+		if (mapped.length === 0) {
+			return none<B[]>();
+		}
+		out.push(mapped[0] as B);
+	}
+
+	return some(out);
+}
