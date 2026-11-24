@@ -500,3 +500,24 @@ Validation.sequence([
   invalid("e2"),
 ]); // invalid(["e1", "e2"])
 ```
+
+---
+
+#### Validation.traverse
+
+```ts
+Validation.traverse<E, A, B>(
+  values: readonly A[],
+  mapper: (value: A) => Validation<E, B>,
+): Validation<E, B[]>
+```
+
+Map every value to a Validation and collect the valid results. Accumulates all errors in input order.
+
+```ts
+import { Validation, invalid, valid } from "ok-fp";
+
+Validation.traverse(["Ada", "", ""], (name) =>
+  name.length > 0 ? valid(name) : invalid("Name is required"),
+); // invalid(["Name is required", "Name is required"])
+```

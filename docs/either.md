@@ -519,3 +519,24 @@ import { Either, left, right } from "ok-fp";
 Either.sequence([right(1), right(2), right(3)]); // right([1, 2, 3])
 Either.sequence([right(1), left("error")]); // left("error")
 ```
+
+---
+
+#### Either.traverse
+
+```ts
+Either.traverse<E, A, B>(
+  values: readonly A[],
+  mapper: (value: A) => Either<E, B>,
+): Either<E, B[]>
+```
+
+Map values to Eithers and collect their Right values. Stops mapping and returns the first Left.
+
+```ts
+import { Either, left, right } from "ok-fp";
+
+Either.traverse([1, 2, 3], (value) =>
+  value > 0 ? right(value * 2) : left("not positive"),
+); // right([2, 4, 6])
+```

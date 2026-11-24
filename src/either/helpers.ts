@@ -27,3 +27,24 @@ export function sequence<E, T>(eithers: Either<E, T>[]): Either<E, T[]> {
 
 	return right(out);
 }
+
+/**
+ * Maps values to Eithers and collects their Right values.
+ * Stops at the first Left without mapping the remaining values.
+ */
+export function traverse<E, A, B>(
+	values: readonly A[],
+	mapper: (value: A) => Either<E, B>,
+): Either<E, B[]> {
+	const out: B[] = [];
+
+	for (const value of values) {
+		const result = mapper(value).toResult();
+		if (!result.ok) {
+			return left(result.error);
+		}
+		out.push(result.value);
+	}
+
+	return right(out);
+}
