@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 
 TBA
 
+## [0.5.0](https://github.com/pwlmc/okfp/compare/v0.4.0...v0.5.0) - 2026-11-24
+
+### Changed
+
+- `Either.tryCatch` and `TaskEither.tryCatch` now accept the error mapper as an optional second argument. It was
+  previously required. When omitted, the thrown or rejected value is preserved as `unknown`.
+
 ## [0.4.0](https://github.com/pwlmc/okfp/compare/v0.3.0...v0.4.0) - 2026-11-21
 
 ### Added

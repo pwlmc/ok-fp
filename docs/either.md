@@ -151,24 +151,24 @@ Either.fromNullable(undefined, () => "empty"); // left("empty")
 #### Either.tryCatch
 
 ```ts
+Either.tryCatch<T>(fn: () => T): Either<unknown, T>
 Either.tryCatch<E, T>(fn: () => T, onThrow: (err: unknown) => E): Either<E, T>
 ```
 
-Safely execute a function that might throw. Catches exceptions and wraps them in Left.
+Safely execute a function that might throw. When `onThrow` is omitted, the thrown value is preserved as `unknown`.
+Provide `onThrow` to map it to a specific error type.
 
 ```ts
 import { Either } from "ok-fp";
 
-Either.tryCatch(
-  () => JSON.parse('{"a":1}'),
-  (err) => "parse failed",
-);
-// right({ a: 1 })
+Either.tryCatch(() => JSON.parse("invalid"));
+// left(unknown)
 
 Either.tryCatch(
   () => JSON.parse("invalid"),
   (err) => "parse failed",
 );
+// left("parse failed")
 ```
 
 ---

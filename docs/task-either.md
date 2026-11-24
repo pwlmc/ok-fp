@@ -171,19 +171,27 @@ TaskEither.fromTask(task(5));  // TaskEither<never, number> - always Right(5)
 #### TaskEither.tryCatch
 
 ```ts
-TaskEither.tryCatch<T, E>(thunk: () => Promise<T>, onThrow: (err: unknown) => E): TaskEither<E, T>
+TaskEither.tryCatch<T>(thunk: () => Promise<T>): TaskEither<unknown, T>
+TaskEither.tryCatch<T, E>(
+  thunk: () => Promise<T>,
+  onThrow: (err: unknown) => E,
+): TaskEither<E, T>
 ```
 
-Safely wrap a Promise-returning thunk that may reject. Rejections are caught and converted to `Left` using `onThrow`.
+Safely wrap a Promise-returning thunk that may reject. When `onThrow` is omitted, the rejected value is preserved as
+`unknown`. Provide `onThrow` to map it to a specific error type.
 
 ```ts
 import { TaskEither } from "ok-fp";
+
+TaskEither.tryCatch(() => fetch("/api/data").then((r) => r.json()));
+// Right(data) or Left(unknown)
 
 TaskEither.tryCatch(
   () => fetch("/api/data").then((r) => r.json()),
   (err) => `Request failed: ${err}`,
 );
-// Right(data) on success, Left("Request failed: ...") on rejection
+// Right(data) or Left("Request failed: ...")
 ```
 
 ---
